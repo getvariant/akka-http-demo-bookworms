@@ -9,16 +9,13 @@ and React.JS; and 2) instrumentation of an A/B test and a feature flag with
 
 #### Clone this repository 
 ```shell
-$ git clone git@github.com:iurisman/bookworms.git
+$ git clone git@github.com:getvariant/java-demo-bookworms.git
 ```
 
 #### Create the Postgres Database
+##### Postgres Docker container
 ```shell
 $ cd bookworms/src/test/db
-```
-To run with containerized Postgres:
-Ensure Docker Desktop is running
-```shell
 ./postgres-down.sh
 ./schema.sh
 ```
@@ -30,12 +27,12 @@ This will:
 
 If you change any of these setting, be sure to update `bookworms/src/main/resources/application.conf`
 
+##### Local Postgres Database
 If you'd rather run with a locally installed Postgres, any recent version should do. It should be
 easy to adopt `postgres-up.sh` and `schema.sh` for the local case.
 
 #### Run Unit Tests on API Server (Optional)
 ```shell
-$ cd bookworms
 $ sbt test
 ```
 
@@ -47,7 +44,7 @@ This will start the Bookworms API server on `localhost:8080`.
 
 #### Run Node Frontend
 ```shell
-$ cd bookworms/node
+$ cd node
 $ npm install
 ```
 This will download required Node modules. You should only have to do it once on a newly cloned

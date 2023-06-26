@@ -3,6 +3,7 @@ package urisman.bookworms
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
+import urisman.bookworms.variant.Variant
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
@@ -17,7 +18,7 @@ object Main {
     futureBinding.onComplete {
       case Success(binding) =>
         val address = binding.localAddress
-        system.log.info("Server online at http://{}:{}/", address.getHostString, address.getPort)
+        system.log.info("Bookworms demo API server started on http://{}:{}/", address.getHostString, address.getPort)
       case Failure(ex) =>
         system.log.error("Failed to bind HTTP endpoint, terminating system", ex)
         system.terminate()
@@ -25,8 +26,9 @@ object Main {
   }
 
   def main(args: Array[String]): Unit = {
-    val system = ActorSystem("HelloAkkaHttpServer")
+    implicit val system = ActorSystem("HelloAkkaHttpServer")
     val routes = new Routes()(system.dispatcher)
-    startHttpServer(routes.routes)(system)
+    startHttpServer(routes.routes)
+
   }
 }

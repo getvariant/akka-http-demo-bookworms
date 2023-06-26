@@ -9,6 +9,7 @@ export function getBookDetails(bookId) {
 }
 
 export function putCopyHold(copyId) {
+  console.log("Fetching from /copies")
   return fetch(`${url}/copies/${copyId}`, {"method": "PUT"}).then(resp => resp.json());
 }
 

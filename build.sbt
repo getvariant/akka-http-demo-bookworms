@@ -1,6 +1,7 @@
 lazy val akkaHttpVersion = "10.4.0"
 lazy val akkaVersion = "2.7.0"
 lazy val circeVersion = "0.14.3"
+lazy val variantVersion = "0.10.3"
 
 // Run in a separate JVM, to make sure sbt waits until all threads have
 // finished before returning.
@@ -15,6 +16,10 @@ lazy val root = (project in file("."))
       scalaVersion    := "2.13.4"
     )),
     name := "bookworms",
+
+    // Add local Maven repo for com.variant.share artifacts built with Maven.
+    resolvers += Resolver.mavenLocal,
+
     libraryDependencies ++= Seq(
       "com.typesafe.akka"  %% "akka-http"                % akkaHttpVersion,
       "com.typesafe.akka"  %% "akka-actor"               % akkaVersion,
@@ -31,6 +36,8 @@ lazy val root = (project in file("."))
       "io.circe"           %% "circe-core"               % circeVersion,
       "io.circe"           %% "circe-generic"            % circeVersion,
       "io.circe"           %% "circe-parser"             % circeVersion,
+
+      "com.variant" % "variant-java-client" % "0.10.3",
 
       // Testing libs
       "com.typesafe.akka"  %% "akka-http-testkit"        % akkaHttpVersion % Test,

@@ -1,11 +1,16 @@
 package urisman.bookworms
 
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse}
+import akka.actor.ActorSystem
+import akka.http.scaladsl.model.headers.Server
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server.{Directive1, ExceptionHandler, Route}
+import akka.http.scaladsl.server.{Directive1, ExceptionHandler, RequestContext, Route, RouteResult}
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import com.typesafe.scalalogging.LazyLogging
+import com.variant.client.{Connection, VariantClient}
+import com.variant.share.httpc.HttpStatusCode
 import urisman.bookworms.api.{Books, Copies, Root}
+import urisman.bookworms.variant.Variant
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -45,9 +50,8 @@ class Routes(implicit ec: ExecutionContext) {
   }
 
   private val copiesRoutes = pathPrefix("copies") {
-    concat(
-      pathEndOrSingleSlash {
-        put {
+      concat(
+        pathEndOrSingleSlash {
           put {
             entity(as[String]) {
               body =>
@@ -55,20 +59,24 @@ class Routes(implicit ec: ExecutionContext) {
             }
           }
         }
-      },
-      path(Segment) { copyId =>
-        put {
-          onSuccess(Copies.hold(copyId.toInt))(resp => complete(resp))
+        ,
+        path(Segment) { copyId =>
+          put {
+            // Put hold on a book copy
+            // Instrument experiment
+            implicit ctx => action {
+              val req = ctx.request
+              Variant.getSession(req)
+              Copies.hold(copyId.toInt)
+            }
+          }
         }
-      }
-    )
+      )
   }
 
-  val routes: Route = {
+  def routes: Route = {
     cors() {
-      handleExceptions(customExceptionHandler) {
-        rootRoutes ~ booksRoutes ~ copiesRoutes
-      }
+      rootRoutes ~ booksRoutes ~ copiesRoutes
     }
   }
   //        //#users-get-delete
@@ -104,10 +112,17 @@ object Routes extends LazyLogging {
   import io.circe._
   import io.circe.parser._
 
-  private val customExceptionHandler = ExceptionHandler {
-    case t: Throwable =>
-      logger.error("Unhandled exception:", t)
-      complete(HttpResponse(InternalServerError, entity = "Something is rotten in the State of Denmark"))
+  private def action(bloc: => Future[HttpResponse])(implicit ctx: RequestContext): Future[RouteResult] = {
+    try {
+      ctx.complete(bloc)
+    } catch {
+      case t: Throwable =>
+        logger.error("Unhandled exception:", t)
+        ctx.complete(
+          HttpResponse(
+            StatusCodes.BadRequest,
+            entity = s"Something's rotten in the Kingdom of Denmark:\n${t.getMessage}"))
+    }
   }
 
   private def withBodyAs[T](body: String)(f: T => Future[HttpResponse])

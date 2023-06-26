@@ -1,0 +1,16 @@
+# Variant variation schema for the Bookworms demo application
+#
+name: bookworms
+description: Variant variation schema for the Bookworms demo application
+states:
+  - name: MyState
+variations:
+  - name: MyVariation
+    experiences:
+      - name: existing
+        isControl: true
+        weight: 3
+      - name: treatment
+        weight: 1
+    onStates:
+      - state: MyState
