@@ -20,29 +20,37 @@ lazy val root = (project in file("."))
     // Add local Maven repo for com.variant.share artifacts built with Maven.
     resolvers += Resolver.mavenLocal,
 
-    libraryDependencies ++= Seq(
-      "com.typesafe.akka"  %% "akka-http"                % akkaHttpVersion,
-      "com.typesafe.akka"  %% "akka-actor"               % akkaVersion,
-      "com.typesafe.akka"  %% "akka-stream"              % akkaVersion,
-      "ch.qos.logback"     % "logback-classic"           % "1.2.11",
-      "ch.megard"          %% "akka-http-cors"           % "1.2.0",
+    javacOptions ++= Seq("-source", "17", "-target", "17"),
 
-      "com.typesafe.scala-logging" %% "scala-logging"    % "3.9.4",
-      "com.typesafe.slick" %% "slick"                    % "3.4.1",
-      "com.typesafe.slick" %% "slick-hikaricp"           % "3.4.1",
-      "org.postgresql"     % "postgresql"                % "42.6.0",
+    libraryDependencies ++= Seq(
+      "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
+      "com.typesafe.akka" %% "akka-actor" % akkaVersion,
+      "com.typesafe.akka" %% "akka-stream" % akkaVersion,
+      "ch.qos.logback" % "logback-classic" % "1.2.11",
+      "ch.megard" %% "akka-http-cors" % "1.2.0",
+
+      "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
+      "com.typesafe.slick" %% "slick" % "3.4.1",
+      "com.typesafe.slick" %% "slick-hikaricp" % "3.4.1",
+      "org.postgresql" % "postgresql" % "42.6.0",
 
       // JSON parsing
-      "io.circe"           %% "circe-core"               % circeVersion,
-      "io.circe"           %% "circe-generic"            % circeVersion,
-      "io.circe"           %% "circe-parser"             % circeVersion,
+      "io.circe" %% "circe-core" % circeVersion,
+      "io.circe" %% "circe-generic" % circeVersion,
+      "io.circe" %% "circe-parser" % circeVersion,
 
+      // Variant client
       "com.variant" % "variant-java-client" % "0.10.3",
+      // TODO: Figure out why sbt does not download Fasterxml jars even though they are
+      //       listed as dependencies by Java Client
+      "com.fasterxml.jackson.core" % "jackson-core" % "2.13.4",
+      "com.fasterxml.jackson.core" % "jackson-databind" % "2.13.4",
+      "com.fasterxml.jackson.core" % "jackson-annotations" % "2.13.4",
 
       // Testing libs
-      "com.typesafe.akka"  %% "akka-http-testkit"        % akkaHttpVersion % Test,
-      "com.typesafe.akka"  %% "akka-actor-testkit-typed" % akkaVersion     % Test,
-      "org.scalatest"      %% "scalatest"                % "3.2.9"         % Test
+      "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test,
+      "com.typesafe.akka" %% "akka-actor-testkit-typed" % akkaVersion % Test,
+      "org.scalatest" %% "scalatest" % "3.2.9" % Test
     ),
     // To debug, uncomment and connect with eclipse after the VM is suspended.
     // Test / javaOptions ++= Seq("-Xdebug",  "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000")
