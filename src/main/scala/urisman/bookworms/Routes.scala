@@ -1,7 +1,5 @@
 package urisman.bookworms
 
-import akka.actor.ActorSystem
-import akka.http.scaladsl.model.headers.Server
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.{Directive1, ExceptionHandler, RequestContext, Route, RouteResult}
@@ -66,7 +64,15 @@ class Routes(implicit ec: ExecutionContext) {
             // Instrument experiment
             implicit ctx => action {
               val req = ctx.request
-              Variant.getSession(req)
+              Variant.targetForState("MyState") match {
+                case Some(stateRequest) =>
+                  // All went well and we have the state request.
+                  println(stateRequest)
+
+                case None =>
+                  // Variant had a problem, default to control
+                  println("None")
+              }
               Copies.hold(copyId.toInt)
             }
           }

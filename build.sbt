@@ -47,6 +47,9 @@ lazy val root = (project in file("."))
       "com.fasterxml.jackson.core" % "jackson-databind" % "2.13.4",
       "com.fasterxml.jackson.core" % "jackson-annotations" % "2.13.4",
 
+      // TODO: Ditto for SnakeYaml
+      "org.yaml" % "snakeyaml" % "2.0",
+
       // Testing libs
       "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test,
       "com.typesafe.akka" %% "akka-actor-testkit-typed" % akkaVersion % Test,

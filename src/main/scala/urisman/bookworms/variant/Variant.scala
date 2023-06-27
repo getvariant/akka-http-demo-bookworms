@@ -1,8 +1,10 @@
 package urisman.bookworms.variant
 
+import akka.http.scaladsl.model.HttpRequest
+import akka.http.scaladsl.server.RequestContext
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
-import com.variant.client.{Connection, Session, VariantClient, VariantException}
+import com.variant.client.{Connection, Session, StateRequest, VariantClient, VariantException}
 
 object Variant extends LazyLogging {
 
@@ -30,7 +32,12 @@ object Variant extends LazyLogging {
       }
     _connection
   }
-  def getSession(request: Any): Option[Session] = {
-    connection().map(_.getOrCreateSession(request))
+  def targetForState(name: String)(implicit ctx: RequestContext): Option[StateRequest] = {
+    import scala.jdk.OptionConverters._
+    for {
+      ssn <- connection().map(_.getOrCreateSession(ctx.request))
+      myState <- ssn.getSchema.getState(name).toScala
+    }
+    yield ssn.targetForState(myState)
   }
 }
