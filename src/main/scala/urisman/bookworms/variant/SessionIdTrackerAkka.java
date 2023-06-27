@@ -1,34 +1,46 @@
 package urisman.bookworms.variant;
 
+import static scala.jdk.javaapi.CollectionConverters.*;
+import akka.http.javadsl.model.headers.SetCookie;
 import akka.http.scaladsl.model.HttpRequest;
 import akka.http.scaladsl.model.HttpResponse;
-import akka.http.scaladsl.model.headers.HttpCookie;
+import akka.http.scaladsl.model.headers.HttpCookiePair$;
 import com.variant.client.SessionIdTracker;
+
+import java.util.Optional;
 
 public class SessionIdTrackerAkka implements SessionIdTracker {
 
   private final String cookieName = "variant-ssnid";
-  private String sid;
+  private Optional<String> sid = Optional.empty();
 
   public SessionIdTrackerAkka(Object... data) {
     HttpRequest req = (HttpRequest) data[0];
-    sid = req.cookies().find(cookie->cookieName.equals(cookie.name())).get().value();
-    System.out.println("****************** " + sid);
+    sid = asJava(req.cookies()).stream()
+      .filter(cookie->cookieName.equals(cookie.name()))
+      .findAny()
+      .map(pair->pair.name());
   }
 
   @Override
-  public String get() {
+  public Optional<String> get() {
     return sid;
   }
 
   @Override
   public void set(String sid) {
-    this.sid = sid;
+    this.sid = Optional.of(sid);
   }
 
   @Override
   public void save(Object... data) {
     HttpResponse resp = (HttpResponse) data[0];
-    //resp.addHeader(HttpCookie$.MODULE$.apply(cookieName, sid));
+    var pair = HttpCookiePair$.MODULE$.apply(cookieName, sid.get());
+    var cookie = pair.toCookie()
+      .withMaxAge(-1)
+      .withHttpOnly(false)
+      .withPath("/");
+    var r2 = resp.addHeader(SetCookie.create(cookie));
+    System.out.println(r2);
   }
 }
