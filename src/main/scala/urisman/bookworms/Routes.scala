@@ -1,18 +1,17 @@
 package urisman.bookworms
 
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse, StatusCodes}
+import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server.{Directive1, ExceptionHandler, RequestContext, Route, RouteResult}
+import akka.http.scaladsl.server.{RequestContext, Route, RouteResult}
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import com.typesafe.scalalogging.LazyLogging
-import com.variant.client.{Connection, VariantClient}
-import com.variant.share.httpc.HttpStatusCode
 import urisman.bookworms.api.{Books, Copies, Root}
 import urisman.bookworms.variant.Variant
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.jdk.CollectionConverters._
 
-class Routes(implicit ec: ExecutionContext) {
+class Routes(implicit ec: ExecutionContext) extends LazyLogging {
 
   import Routes._
 
@@ -60,18 +59,18 @@ class Routes(implicit ec: ExecutionContext) {
         ,
         path(Segment) { copyId =>
           put {
-            // Put hold on a book copy
-            // Instrument experiment
+            // Put hold on a book copy.
             implicit ctx => action {
-              val req = ctx.request
+              // Instrument a Variant experiment.
               Variant.targetForState("MyState") match {
                 case Some(stateRequest) =>
                   // All went well and we have the state request.
-                  println(stateRequest)
+                  val exp = stateRequest.getLiveExperiences.asScala.head
+                  logger.debug(s"Targeted for experience $exp")
 
                 case None =>
                   // Variant had a problem, default to control
-                  println("None")
+                  logger.warn(s"Variant failed. See logs for details. Defaulted to control")
               }
               Copies.hold(copyId.toInt)
             }
@@ -114,9 +113,10 @@ class Routes(implicit ec: ExecutionContext) {
 object Routes extends LazyLogging {
 
   import akka.http.scaladsl.model.StatusCodes._
-  import scala.reflect.runtime.universe._
   import io.circe._
   import io.circe.parser._
+
+  import scala.reflect.runtime.universe._
 
   private def action(bloc: => Future[HttpResponse])(implicit ctx: RequestContext): Future[RouteResult] = {
     try {

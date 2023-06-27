@@ -9,7 +9,7 @@ variations:
     experiences:
       - name: existing
         isControl: true
-        weight: 3
+        weight: 1
       - name: treatment
         weight: 1
     onStates:
