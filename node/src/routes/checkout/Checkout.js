@@ -18,10 +18,8 @@ export function Checkout() {
       const bookDetails = JSON.parse(localStorage.getItem('book'));
       const book = bookDetails.book;
       const copy = bookDetails.availableCopies.find(elem => elem.id == params.id);
-      const tax = (copy.price * 0.097).toFixed(2);
-      const shipping = (Math.random() * 12).toFixed(2);
-      const total = copy.price + tax + shipping;
-
+      const suggVisibility = receipt.suggestions ? 'default' : 'none'
+      const suggestions = receipt.suggestions ? receipt.suggestions : []
         return (
           <table className="book-detail">
             <tbody>
@@ -55,6 +53,25 @@ export function Checkout() {
                       </tbody>
                     </table>
                     <button onClick={() => buy(copy)}>Buy</button>
+                    <table style={{'display': suggVisibility }}>
+                      <tr>
+                        <td colspan="3">
+                          Customers also bought:
+                        </td>
+                      </tr>
+                      <tr>
+                        {
+                          suggestions.map(
+                           book =>
+                            <td>
+                              <img width="60%" src={book.coverImageUri}/>
+                            </td>
+                          )
+                        }
+                      </tr>
+                      <tr>
+                      </tr>
+                    </table>
                   </td>
                 </tr>
             </tbody>

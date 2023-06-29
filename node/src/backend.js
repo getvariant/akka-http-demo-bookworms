@@ -3,12 +3,7 @@ const url = ""
 
 export function getBooks() {
   return fetch(
-    `${url}/books`,
-    {
-        method: "GET",
-        headers: { 'Accept': 'application/json' }
-    }
-  ).then(resp => resp.json());
+    `${url}/books`).then(resp => resp.json());
 }
 
 export function getBookDetails(bookId) {

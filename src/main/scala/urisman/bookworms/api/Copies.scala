@@ -37,12 +37,18 @@ object Copies extends Endpoint {
       }
 
   // Treatment code path
-  def holdWithSuggestions(copyId: Int)(implicit ec: ExecutionContext): Future[HttpResponse] =
-    Postgres.getCopy(copyId)
-      .map {
-        case Some(copy) => respondOk(receiptFor(copy))
+  def holdWithSuggestions(copyId: Int)(implicit ec: ExecutionContext): Future[HttpResponse] = {
+    for {
+      copyOpt <- Postgres.getCopy(copyId)
+      books <- Postgres.getBooks
+    } yield {
+      val suggestions = Random.shuffle(books).take(3)
+      copyOpt match {
+        case Some(copy) => respondOk(ReceiptWithSuggestions.fromReceipt(receiptFor(copy), suggestions))
         case None => respondBadRequest(s"No copy with ID $copyId")
       }
+    }
+  }
 
 
   def update(copy: Copy)(implicit ec: ExecutionContext): Future[HttpResponse] =

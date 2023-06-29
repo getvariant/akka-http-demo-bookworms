@@ -31,13 +31,6 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
           get {
             onSuccess(Books.get)(resp => complete(resp))
           },
-          //            post {
-          //              entity(as[Book]) { user =>
-          //                onSuccess(createUser(user)) { performed =>
-          //                  complete((StatusCodes.Created, performed))
-          //                }
-          //              }
-          //            }
         )
       },
       path(Segment) { bookId =>

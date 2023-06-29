@@ -46,6 +46,15 @@ package object bookworms {
     implicit val coded: Codec[Receipt] = deriveCodec
   }
 
+  case class ReceiptWithSuggestions(price: String, tax: String, shipping: String, total: String, suggestions: Seq[Book])
+
+  object ReceiptWithSuggestions {
+    implicit val coded: Codec[ReceiptWithSuggestions] = deriveCodec
+    def fromReceipt(receipt: Receipt, suggestions: Seq[Book]): ReceiptWithSuggestions =
+      new ReceiptWithSuggestions(receipt.price, receipt.tax, receipt.shipping, receipt.total, suggestions)
+
+  }
+
   //// Exceptions
   case class JsonDecodeException(source: String, target: Class[_])
     extends Exception(s"""Unable to decode JSON string '$source' as class ${target.getName}""")
