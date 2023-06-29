@@ -1,7 +1,14 @@
-const url = "http://localhost:8080"
+//const url = "http://localhost:8080"
+const url = ""
 
 export function getBooks() {
-  return fetch(`${url}/books`).then(resp => resp.json());
+  return fetch(
+    `${url}/books`,
+    {
+        method: "GET",
+        headers: { 'Accept': 'application/json' }
+    }
+  ).then(resp => resp.json());
 }
 
 export function getBookDetails(bookId) {
@@ -9,7 +16,6 @@ export function getBookDetails(bookId) {
 }
 
 export function putCopyHold(copyId) {
-  console.log("Fetching from /copies")
   return fetch(`${url}/copies/${copyId}`, {"method": "PUT"}).then(resp => resp.json());
 }
 

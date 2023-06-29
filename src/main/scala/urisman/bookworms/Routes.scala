@@ -89,9 +89,9 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
   }
 
   def routes: Route = {
-    cors() {
+    //cors() {
       rootRoutes ~ booksRoutes ~ copiesRoutes
-    }
+    //}
   }
   //        //#users-get-delete
 //        //#users-get-post
