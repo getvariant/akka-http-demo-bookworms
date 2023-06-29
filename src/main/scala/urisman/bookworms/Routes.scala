@@ -5,11 +5,13 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.{RequestContext, Route, RouteResult}
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import com.typesafe.scalalogging.LazyLogging
+import com.variant.client.StateRequest
 import urisman.bookworms.api.{Books, Copies, Root}
 import urisman.bookworms.variant.Variant
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.jdk.CollectionConverters._
+import scala.util.{Failure, Success}
 
 class Routes(implicit ec: ExecutionContext) extends LazyLogging {
 
@@ -62,17 +64,24 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
             // Put hold on a book copy.
             implicit ctx => action {
               // Instrument a Variant experiment.
-              Variant.targetForState("MyState") match {
+              Variant.targetForState("Checkout") match {
+
                 case Some(stateRequest) =>
                   // All went well and we have the state request.
                   val exp = stateRequest.getLiveExperiences.asScala.head
                   logger.debug(s"Targeted for experience $exp")
+                  (exp.getName match {
+                    case "NoSuggestions" => Copies.hold(copyId.toInt)
+                    case "WithSuggestions" => Copies.holdWithSuggestions(copyId.toInt)
+                  })
+                    // Commit or fail state request
+                    .transform(Variant.responseTransformer(stateRequest))
 
                 case None =>
-                  // Variant had a problem, default to control
-                  logger.warn(s"Variant failed. See logs for details. Defaulted to control")
+                  // We didn't get a state request. Variant server may be down, or the experiment we anticipated
+                  // may be offline. Defaulting to control")
+                  Copies.hold(copyId.toInt)
               }
-              Copies.hold(copyId.toInt)
             }
           }
         }

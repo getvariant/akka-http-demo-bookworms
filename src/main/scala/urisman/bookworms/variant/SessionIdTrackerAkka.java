@@ -14,8 +14,8 @@ public class SessionIdTrackerAkka implements SessionIdTracker {
   private final String cookieName = "variant-ssnid";
   private Optional<String> sid = Optional.empty();
 
-  public SessionIdTrackerAkka(Object... data) {
-    HttpRequest req = (HttpRequest) data[0];
+  public SessionIdTrackerAkka(Object data) {
+    HttpRequest req = (HttpRequest) data;
     sid = asJava(req.cookies()).stream()
       .filter(cookie->cookieName.equals(cookie.name()))
       .findAny()
@@ -33,14 +33,26 @@ public class SessionIdTrackerAkka implements SessionIdTracker {
   }
 
   @Override
-  public void save(Object... data) {
-    HttpResponse resp = (HttpResponse) data[0];
+  public void save(Object data) {
+    Object[] asArray = (Object[]) data;
+    HttpResponse resp = (HttpResponse) asArray[0];
     var pair = HttpCookiePair$.MODULE$.apply(cookieName, sid.get());
     var cookie = pair.toCookie()
       .withMaxAge(-1)
       .withHttpOnly(false)
       .withPath("/");
-    var r2 = resp.addHeader(SetCookie.create(cookie));
-    System.out.println(r2);
+    var foo = resp.addHeader(SetCookie.create(cookie));
+   asArray[0] = foo;
   }
+/*
+  public static void main(String[] args) {
+    String[] tokens = {"old value"};
+    foo(tokens);
+    System.out.println(tokens[0]);
+  }
+
+  private static void foo(String[] tokens) {
+    tokens[0] = "new value";
+  }
+*/
 }

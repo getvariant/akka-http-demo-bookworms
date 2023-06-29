@@ -9,15 +9,15 @@ and React.JS; and 2) instrumentation of an A/B test and a feature flag with
 
 #### Clone this repository 
 ```shell
-$ git clone git@github.com:getvariant/java-demo-bookworms.git
+$ git clone git@github.com:getvariant/akka-http-demo-bookworms.git
 ```
 
 #### Create the Postgres Database
 ##### Postgres Docker container
 ```shell
-$ cd bookworms/src/test/db
-./postgres-down.sh
-./schema.sh
+$ cd src/test/db
+$ ./postgres-down.sh
+$ ./schema.sh
 ```
 This will:
 * Deploy Postgres 13 in a Docker container with the root user `postgres` listening on port `5432`;
@@ -34,6 +34,13 @@ easy to adopt `postgres-up.sh` and `schema.sh` for the local case.
 #### Run Unit Tests on API Server (Optional)
 ```shell
 $ sbt test
+```
+
+#### TODO: Run Variant CVM Server
+* Start Variant Docker container.
+* Deploy the Bookworms schema to Variant server
+```shell
+$ docker cp ...
 ```
 
 #### Run API Server

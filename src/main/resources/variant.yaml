@@ -3,14 +3,14 @@
 name: bookworms
 description: Variant variation schema for the Bookworms demo application
 states:
-  - name: MyState
+  - name: Checkout
 variations:
-  - name: MyVariation
+  - name: Suggestions
     experiences:
-      - name: existing
+      - name: NoSuggestions
         isControl: true
         weight: 1
-      - name: treatment
+      - name: WithSuggestions
         weight: 1
     onStates:
-      - state: MyState
+      - state: Checkout

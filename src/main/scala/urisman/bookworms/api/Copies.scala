@@ -35,6 +35,16 @@ object Copies extends Endpoint {
         case Some(copy) => respondOk(receiptFor(copy))
         case None => respondBadRequest(s"No copy with ID $copyId")
       }
+
+  // Treatment code path
+  def holdWithSuggestions(copyId: Int)(implicit ec: ExecutionContext): Future[HttpResponse] =
+    Postgres.getCopy(copyId)
+      .map {
+        case Some(copy) => respondOk(receiptFor(copy))
+        case None => respondBadRequest(s"No copy with ID $copyId")
+      }
+
+
   def update(copy: Copy)(implicit ec: ExecutionContext): Future[HttpResponse] =
     Postgres.updateCopy(copy)
       .map {

@@ -12,7 +12,7 @@ public class TargetingTrackerAkka implements TargetingTracker {
   private final String cookieName = "variant-target";
   private String sid;
 
-  public TargetingTrackerAkka(Object... data) {
+  public TargetingTrackerAkka(Object data) {
   }
 
   @Override
@@ -26,6 +26,6 @@ public class TargetingTrackerAkka implements TargetingTracker {
   }
 
   @Override
-  public void save(Object... data) {
+  public void save(Object data) {
   }
 }
