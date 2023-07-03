@@ -3,15 +3,12 @@ package urisman.bookworms
 import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.{RequestContext, Route, RouteResult}
-import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import com.typesafe.scalalogging.LazyLogging
-import com.variant.client.StateRequest
 import urisman.bookworms.api.{Books, Copies, Root}
 import urisman.bookworms.variant.Variant
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.jdk.CollectionConverters._
-import scala.util.{Failure, Success}
 
 class Routes(implicit ec: ExecutionContext) extends LazyLogging {
 
@@ -82,9 +79,7 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
   }
 
   def routes: Route = {
-    //cors() {
       rootRoutes ~ booksRoutes ~ copiesRoutes
-    //}
   }
   //        //#users-get-delete
 //        //#users-get-post

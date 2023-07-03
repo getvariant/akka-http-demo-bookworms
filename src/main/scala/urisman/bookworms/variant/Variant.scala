@@ -42,7 +42,6 @@ object Variant extends LazyLogging {
       myState <- ssn.getSchema.getState(name).toScala
     }
     yield {
-      println(s"**************** ${ssn.getId}")
       ssn.targetForState(myState)
     }
   }
