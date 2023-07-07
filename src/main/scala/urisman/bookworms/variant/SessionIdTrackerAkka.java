@@ -38,7 +38,6 @@ public class SessionIdTrackerAkka implements SessionIdTracker {
     HttpResponse resp = (HttpResponse) asArray[0];
     var pair = HttpCookiePair$.MODULE$.apply(cookieName, sid.get());
     var cookie = pair.toCookie()
-      //.withMaxAge(-1)
       .withHttpOnly(false)
       .withPath("/");
     var foo = resp.addHeader(SetCookie.create(cookie));
