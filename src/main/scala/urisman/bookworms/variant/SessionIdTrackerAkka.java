@@ -17,9 +17,9 @@ public class SessionIdTrackerAkka implements SessionIdTracker {
   public SessionIdTrackerAkka(Object data) {
     HttpRequest req = (HttpRequest) data;
     sid = asJava(req.cookies()).stream()
-      .filter(cookie->cookieName.equals(cookie.name()))
+      .filter(cookie -> cookieName.equals(cookie.name()))
       .findAny()
-      .map(pair->pair.name());
+      .map(pair -> pair.value());
   }
 
   @Override
@@ -43,15 +43,4 @@ public class SessionIdTrackerAkka implements SessionIdTracker {
     var foo = resp.addHeader(SetCookie.create(cookie));
    asArray[0] = foo;
   }
-/*
-  public static void main(String[] args) {
-    String[] tokens = {"old value"};
-    foo(tokens);
-    System.out.println(tokens[0]);
-  }
-
-  private static void foo(String[] tokens) {
-    tokens[0] = "new value";
-  }
-*/
 }

@@ -12,11 +12,9 @@ object Variant extends LazyLogging {
 
   private val config = ConfigFactory.load()
   private val uri = config.getString("bookworms.variant.uri")
-  private val client: VariantClient = VariantClient
-    .builder()
-    .withSessionIdTrackerClass(classOf[SessionIdTrackerAkka])
-    .withTargetingTrackerClass(classOf[TargetingTrackerAkka])
-    .build()
+  private val client: VariantClient = VariantClient.build {
+    builder => builder.withSessionIdTrackerClass(classOf[SessionIdTrackerAkka])
+  }
   private var _connection: Option[Connection] = None
 
   private def connection(): Option[Connection] = {

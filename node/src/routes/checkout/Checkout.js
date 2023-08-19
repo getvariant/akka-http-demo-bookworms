@@ -56,7 +56,8 @@ export function Checkout() {
                     <table style={{'display': suggVisibility }}>
                       <tr>
                         <td colspan="3">
-                          Customers also bought:
+                          Customers who bought <b>{book.title}</b><br/>
+                          also bought:
                         </td>
                       </tr>
                       <tr>
