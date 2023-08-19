@@ -9,14 +9,15 @@ and React.JS; and 2) instrumentation of an A/B test and a feature flag with
 
 #### Clone this repository 
 ```shell
-$ git clone git@github.com:getvariant/akka-http-demo-bookworms.git
+$ git clone git@github.com:getvariant/variant-demo-scala-akka.git
 ```
 
 #### Create the Postgres Database
 ##### Postgres Docker container
+Assuming you have docker installed (e.g. Docker Desktop for MacOS),
 ```shell
-$ cd src/test/db
-$ ./postgres-down.sh
+$ cd src/db
+$ ./postgres-up.sh
 $ ./schema.sh
 ```
 This will:
@@ -36,13 +37,23 @@ easy to adopt `postgres-up.sh` and `schema.sh` for the local case.
 $ sbt test
 ```
 
-#### TODO: Run Variant CVM Server
-* Start Variant Docker container.
-* Deploy the Bookworms schema to Variant server
+#### Deploy Experiment Schema to Variant Server
+#### TODO: Containerize
+Copy experiment schema to Variant server's `schemata` directory
 ```shell
-$ docker cp ...
+cp bookworms.yaml <variant-server-dir>/schemata
 ```
-
+Start Variant Server
+```shell
+$ <variant-server-dir>/bin/variant start
+```
+The server should come up and give you the following output:
+```text
+...
+2023-08-16 14:46:39,483 INFO - c.v.s.schema.Schemata - [422] Deployed schema [bookworms] from file [...]
+...
+2023-08-16 14:46:39,488 INFO - c.v.s.impl.VariantServerImpl - [433] Variant CVM Server release 0.10.3 started on port [5377] in 1.048s
+```
 #### Run API Server
 ```shell
 $ sbt run

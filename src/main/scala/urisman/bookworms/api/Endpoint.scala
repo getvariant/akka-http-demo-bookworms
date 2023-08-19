@@ -18,7 +18,7 @@ trait Endpoint {
       entity = HttpEntity(ContentTypes.`text/plain(UTF-8)`,msg)
     )
 
-  def respondNoContent() = {
+  def respondNoContent(): HttpResponse = {
     HttpResponse(StatusCodes.NoContent)
   }
 }

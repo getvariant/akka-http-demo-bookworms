@@ -1,7 +1,9 @@
 # Variant variation schema for the Bookworms demo application
 #
 name: bookworms
-description: Variant variation schema for the Bookworms demo application
+description: Variant experiment schema for the Bookworms demo application
+flusher:
+  class: com.variant.spi.stdlib.flush.TraceEventFlusherCsv
 states:
   - name: Checkout
 variations:
