@@ -64,6 +64,19 @@ code {
     monospace;
 }
 
+#user-select {
+    position: absolute;
+    left: 780px;
+    top: 150px;
+    font-size: 16px;
+    color: black;
+}
+
+#user-select select {
+    margin-left: 11px;
+    background-color: lavender;
+}
+
 table {
     width: 100%;
     clear: both;
