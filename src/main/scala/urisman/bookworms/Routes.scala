@@ -4,7 +4,7 @@ import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.{RequestContext, Route, RouteResult}
 import com.typesafe.scalalogging.LazyLogging
-import urisman.bookworms.api.{Books, Copies, Root}
+import urisman.bookworms.api.{Books, Copies, Root, Users}
 import urisman.bookworms.variant.Variant
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -78,33 +78,26 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
       )
   }
 
-  def routes: Route = {
-      rootRoutes ~ booksRoutes ~ copiesRoutes
+  private val userRoutes = pathPrefix("user") {
+    concat(
+      pathEnd {
+        concat(
+          get {
+            complete(Users.getUser)
+          },
+        )
+      },
+      path(Segment) { user =>
+        put {
+          complete(Users.setUser(user))
+        }
+      }
+    )
   }
-  //        //#users-get-delete
-//        //#users-get-post
-//        path(Segment) { name =>
-//          concat(
-//            get {
-//              //#retrieve-user-info
-//              rejectEmptyResponse {
-//                onSuccess(getUser(name)) { response =>
-//                  complete(response.maybeUser)
-//                }
-//              }
-//              //#retrieve-user-info
-//            },
-//            delete {
-//              //#users-delete-logic
-//              onSuccess(deleteUser(name)) { performed =>
-//                complete((StatusCodes.OK, performed))
-//              }
-//              //#users-delete-logic
-//            })
-//        })
-//      //#users-get-delete
-//    }
-//  )
+
+  def routes: Route = {
+      rootRoutes ~ booksRoutes ~ copiesRoutes ~ userRoutes
+  }
 }
 
 object Routes extends LazyLogging {

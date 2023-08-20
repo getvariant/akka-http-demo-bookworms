@@ -25,3 +25,11 @@ export function buyCopy(copy) {
       method: "PUT"
     });
 }
+
+export function getUser() {
+  return fetch(`${url}/user`).then(resp => resp.json());
+}
+
+export function setUser(name) {
+  return fetch(`${url}/user/${name}`, {"method": "PUT"});
+}
