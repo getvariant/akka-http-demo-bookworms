@@ -1,4 +1,4 @@
-package urisman.bookworms.variant;
+package com.variant.demo.bookworms.variant;
 
 import static scala.jdk.javaapi.CollectionConverters.*;
 import akka.http.javadsl.model.headers.SetCookie;

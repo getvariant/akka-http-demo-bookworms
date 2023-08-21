@@ -1,4 +1,4 @@
-package urisman.bookworms.variant
+package com.variant.demo.bookworms.variant
 
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.server.RequestContext

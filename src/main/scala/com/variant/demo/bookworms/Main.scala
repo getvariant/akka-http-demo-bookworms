@@ -1,9 +1,9 @@
-package urisman.bookworms
+package com.variant.demo.bookworms
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
-import urisman.bookworms.variant.Variant
+import com.variant.demo.bookworms.variant.Variant
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}

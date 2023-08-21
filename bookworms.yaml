@@ -9,7 +9,7 @@ states:
 variations:
   - name: Suggestions
     hooks:
-      - name com.variant.spi.
+      - name: com.variant.demo.bookworms.variant.TargetingHook
     experiences:
       - name: NoSuggestions
         isControl: true

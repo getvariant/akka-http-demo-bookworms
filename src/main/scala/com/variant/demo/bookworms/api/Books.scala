@@ -1,4 +1,4 @@
-package urisman.bookworms.api
+package com.variant.demo.bookworms.api
 
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse, StatusCodes}
 import io.circe.syntax._

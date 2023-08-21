@@ -1,4 +1,4 @@
-package urisman
+package com.variant.demo
 
 import io.circe.Decoder.Result
 import io.circe._

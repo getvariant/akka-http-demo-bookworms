@@ -1,4 +1,4 @@
-package urisman.bookworms
+package com.variant.demo.bookworms
 
 import io.circe.parser._
 import slick.jdbc.PostgresProfile.api._
