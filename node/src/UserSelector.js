@@ -4,9 +4,11 @@ import { getUser, setUser } from "./backend.js";
 function UserSelector() {
 
     function onChangeListener(e) {
-        document.cookie = "variant-ssnid=;host=loclhost;path=/;expires=" + new Date(0).toUTCString()
-        console.log(document.cookie)
+        // Change user on the server
         setUser(e.target.value);
+        // Close current variant session by deleting the session id cookie.
+        document.cookie = "variant-ssnid=;host=loclhost;path=/;expires=" + new Date(0).toUTCString()
+        // Make the new select setting stick
         setCurrentUser(e.target.value);
     }
 

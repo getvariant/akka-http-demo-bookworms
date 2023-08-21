@@ -4,7 +4,7 @@ import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.server.RequestContext
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
-import com.variant.client.{Connection, Session, StateRequest, VariantClient, VariantException}
+import com.variant.client.{Connection, StateRequest, VariantClient}
 
 import scala.util.{Failure, Success, Try}
 

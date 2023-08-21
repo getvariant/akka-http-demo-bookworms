@@ -8,6 +8,8 @@ states:
   - name: Checkout
 variations:
   - name: Suggestions
+    hooks:
+      - name com.variant.spi.
     experiences:
       - name: NoSuggestions
         isControl: true
