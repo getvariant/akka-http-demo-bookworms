@@ -1,8 +1,7 @@
 package com.variant.demo.bookworms.api
 
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse, StatusCodes}
-import io.circe.syntax._
-import urisman.bookworms.Postgres
+import akka.http.scaladsl.model.HttpResponse
+import com.variant.demo.bookworms.Postgres
 
 import scala.concurrent.{ExecutionContext, Future}
 

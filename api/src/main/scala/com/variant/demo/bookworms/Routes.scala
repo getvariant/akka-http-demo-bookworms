@@ -4,10 +4,8 @@ import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.{RequestContext, Route, RouteResult}
 import com.typesafe.scalalogging.LazyLogging
-import com.variant.demo.bookworms.api.Root
+import com.variant.demo.bookworms.api.{Books, Copies, Root, Users}
 import com.variant.demo.bookworms.variant.Variant
-import urisman.bookworms.api.{Books, Copies, Root, Users}
-import urisman.bookworms.variant.Variant
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.jdk.CollectionConverters._

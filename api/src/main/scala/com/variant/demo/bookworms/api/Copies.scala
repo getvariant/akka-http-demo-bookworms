@@ -1,9 +1,9 @@
 package com.variant.demo.bookworms.api
 
 import akka.http.scaladsl.model.HttpResponse
-import urisman.bookworms._
+import com.variant.demo.bookworms._
 
-import java.text.{FieldPosition, NumberFormat, ParsePosition}
+import java.text.NumberFormat
 import java.util.Locale
 import scala.concurrent.{ExecutionContext, Future}
 import scala.math.BigDecimal.RoundingMode

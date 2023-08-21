@@ -1,10 +1,10 @@
+*.DS_Store
 *.class
 *.log
-/.idea/
-/.bsp/
-/target/
-/project/target/
-/project/project/target/
+*.idea/
+*.bsp/
+api/target/
+api/project/
 /node/node_modules/
 /node/target/
 /node/package-lock.json
