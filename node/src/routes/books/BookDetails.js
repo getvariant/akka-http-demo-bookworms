@@ -30,12 +30,15 @@ export function BookDetails() {
                 <h4>Publication Date: {bookDetails.book.pubDate}</h4>
               </td>
               <td>
-                <h3>Available Copies:</h3>
+                <h3>Available Copies: {bookDetails.book.copies}</h3>
                 <table>
                   <thead>
                     <tr>
                       <th>Condition</th>
-                      <th>Price</th>
+                      {bookDetails.withReputation &&
+                        <th>{"Seller's reputation"}</th>
+                      }
+                      <th style={{"textAlign":"right"}}>Price</th>
                       <th></th>
                     </tr>
                   </thead>

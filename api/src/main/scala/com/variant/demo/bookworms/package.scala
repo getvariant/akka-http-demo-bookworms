@@ -40,7 +40,7 @@ package object bookworms {
     def apply(copy: Copy, sellerReputation: Int): CopyWithReputation = {
       CopyWithReputation(copy.id, copy.bookId, copy.condition, copy.price, copy.location, copy.available, sellerReputation)
     }
-    implicit val codec: Codec[Copy] = deriveCodec
+    implicit val codec: Codec[CopyWithReputation] = deriveCodec
   }
 
   case class BookDetails(book: Book, availableCopies: Seq[Copy])
@@ -48,7 +48,7 @@ package object bookworms {
     implicit val coded: Codec[BookDetails] = deriveCodec
   }
 
-  case class BookDetailsWithReputation(book: Book, availableCopies: Seq[CopyWithReputation])
+  case class BookDetailsWithReputation(book: Book, availableCopies: Seq[CopyWithReputation], withReputation: Boolean = true)
   object BookDetailsWithReputation {
     def apply(bookDetails: BookDetails, reputation: Int): BookDetailsWithReputation = {
       val copiesWithReputation = bookDetails.availableCopies

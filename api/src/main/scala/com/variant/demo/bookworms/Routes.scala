@@ -39,8 +39,8 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
                 // All went well and we have a state request
                 val exp = stateRequest.getLiveExperience("ReputationFF").get()
                 (exp.getName match {
-                  case "Qualified" => Books.get(bookId.toInt)
-                  case "Disqualified" => Books.getWithReputation(bookId.toInt)
+                  case "NoReputation" => Books.get(bookId.toInt)
+                  case "WithReputation" => Books.getWithReputation(bookId.toInt)
                 })
                   // Commit or fail state request
                   .transform(Variant.responseTransformer(stateRequest))
