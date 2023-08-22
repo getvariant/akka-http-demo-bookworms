@@ -70,14 +70,14 @@ object Postgres {
   def getCopiesOf(bookId: Int)(implicit ec: ExecutionContext): Future[Seq[Copy]] = {
     postgres.run(
       sql"""
-            SELECT id, book_id, condition, price, location, available
+            SELECT id, book_id, condition, price, location, seller, reputation, available
             FROM copies
             WHERE book_id = ${bookId} AND available;
-            """.as[(Int, Int, String, BigDecimal, String, Boolean)])
+            """.as[(Int, Int, String, BigDecimal, String, String, Int, Boolean)])
       .map {
         _.map {
-          case (id, bookId, condition, price, location, isAvailable) =>
-            Copy(id, bookId, condition, price, location, isAvailable)
+          case (id, bookId, condition, price, location, seller, reputation, isAvailable) =>
+            Copy(id, bookId, condition, price, location, seller, reputation, isAvailable)
         }
       }
   }
@@ -86,14 +86,14 @@ object Postgres {
   def getCopy(copyId: Int)(implicit ec: ExecutionContext): Future[Option[Copy]] = {
     postgres.run(
       sql"""
-            SELECT id, book_id, condition, price, location, available
+            SELECT id, book_id, condition, price, location, seller, reputation, available
             FROM copies
             WHERE id = ${copyId} AND available;
-            """.as[(Int, Int, String, BigDecimal, String, Boolean)])
+            """.as[(Int, Int, String, BigDecimal, String, String, Int, Boolean)])
       .map {
         _.map {
-          case (id, bookId, condition, price, location, isAvailable) =>
-            Copy(id, bookId, condition, price, location, isAvailable)
+          case (id, bookId, condition, price, location, seller, reputation, isAvailable) =>
+            Copy(id, bookId, condition, price, location, seller, reputation, isAvailable)
         }
           .headOption
       }

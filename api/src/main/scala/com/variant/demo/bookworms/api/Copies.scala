@@ -11,7 +11,7 @@ import scala.util.Random
 
 object Copies extends Endpoint {
 
-  def receiptFor(copy: Copy): Receipt = {
+  private def receiptFor(copy: Copy): Receipt = {
     val price = copy.price.setScale(2)
     val tax = copy.price * BigDecimal(0.097).setScale(2, RoundingMode.HALF_EVEN)
     val shipping = BigDecimal(

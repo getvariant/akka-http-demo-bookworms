@@ -20,14 +20,7 @@ object Books extends Endpoint {
   /** Simulate the new book details code path that includes the seller's reputation */
   def getWithReputation(bookId: Int)(implicit ec: ExecutionContext): Future[HttpResponse] = {
     Postgres.getBookDetails(bookId)
-      .map {
-        _.map {
-          bookDetails =>
-            val result = BookDetailsWithReputation(bookDetails, Random.nextInt(4));
-            println(result)
-            result
-        }
-      }
+      .map { _.map { bookDetails => BookDetailsWithReputation(bookDetails) }}
       .map(respondOk(_))
   }
 }

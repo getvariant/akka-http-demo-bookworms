@@ -43,7 +43,8 @@ export function BookDetails() {
                     </tr>
                   </thead>
                   <tbody>
-                      {bookDetails.availableCopies.map(copy => <BookCopy key={copy.id} copy={copy} />)}
+                      { /*bookDetails.availableCopies.map(copy => <BookCopy key={copy.id} copy={copy} withReputation={bookDetails.withReputation ? true : false}/>)*/}
+                      {bookDetails.availableCopies.map(copy => <BookCopy key={copy.id} copy={copy} withReputation={bookDetails.withReputation}/>)}
                   </tbody>
                 </table>
               </td>
