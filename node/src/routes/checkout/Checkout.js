@@ -33,6 +33,7 @@ export function Checkout() {
                     <h4>ISBN: {book.isbn}</h4>
                     <h4>Publication Date: {bookDetails.book.pubDate}</h4>
                     <br/>
+                    Sold by <b>{copy.seller}</b> <span className="reputation">{'\u2605'.repeat(copy.reputation) + '\u2606'.repeat(5 - copy.reputation)}</span><br/>
                     Ships from <b>{copy.location}</b> in 2-5 business days
                     <br/>
                     <table className="bill">
@@ -54,24 +55,26 @@ export function Checkout() {
                     </table>
                     <button onClick={() => buy(copy)}>Buy</button>
                     <table style={{'display': suggVisibility }}>
-                      <tr>
-                        <td colspan="3">
-                          Customers who bought <b>{book.title}</b><br/>
-                          also bought:
-                        </td>
-                      </tr>
-                      <tr>
-                        {
-                          suggestions.map(
-                           book =>
-                            <td>
-                              <img width="60%" src={book.coverImageUri}/>
+                      <tbody>
+                          <tr>
+                            <td colSpan="3">
+                              Customers who bought <b>{book.title}</b><br/>
+                              also bought:
                             </td>
-                          )
-                        }
-                      </tr>
-                      <tr>
-                      </tr>
+                          </tr>
+                          <tr>
+                            {
+                              suggestions.map(
+                               book =>
+                                <td>
+                                  <img width="60%" src={book.coverImageUri}/>
+                                </td>
+                              )
+                            }
+                          </tr>
+                          <tr>
+                          </tr>
+                      </tbody>
                     </table>
                   </td>
                 </tr>

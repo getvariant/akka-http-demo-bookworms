@@ -98,7 +98,7 @@ table th {
     background-color: #eee;
 }
 
-td.reputation {
+.reputation {
     color: lightcoral;
 }
 table.books-inventory td,
