@@ -30,9 +30,11 @@ function UserSelector() {
               value={currentUser}
               onChange={e => onChangeListener(e)}
             >
-              <option value="random">random</option>
-              <option value="qualifiedForTest">qualifiedForTest</option>
-              <option value="disqualifiedForTest">disqualifiedForTest</option>
+              <option value="Everyman">Everyman</option>
+              <option value="WithSuggestions">WithSuggestions</option>
+              <option value="NoSuggestions">NoSuggestions</option>
+              <option value="Qualified">qualified</option>
+              <option value="Disqualified">Disqualified</option>
             </select>
             </label>
         );

@@ -1,6 +1,6 @@
 header {
   text-align: center;
-  margin: 20px 0 40px;
+  margin: 20px 0 6px;
   background-image: url("/bookworm.webp");
   background-position: 30% 74%;
   display: inline-block;
@@ -65,16 +65,17 @@ code {
 }
 
 #user-select {
-    position: absolute;
-    left: 780px;
-    top: 150px;
+    float: right;
     font-size: 16px;
     color: black;
+    width: 300px;
+    text-align: right;
+    margin: 0 0 6px;
 }
 
 #user-select select {
     margin-left: 11px;
-    background-color: lavender;
+    background-color: lightsteelblue;
 }
 
 table {
