@@ -9,6 +9,7 @@ import com.variant.demo.bookworms.variant.Variant
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
 
 class Routes(implicit ec: ExecutionContext) extends LazyLogging {
 
@@ -32,7 +33,23 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
       },
       path(Segment) { bookId =>
         get {
-          onSuccess(Books.get(bookId.toInt)) (resp => complete(resp))
+          implicit ctx => action {
+            Variant.targetForState("BookDetails") match {
+              case Some(stateRequest) =>
+                // All went well and we have a state request
+                val exp = stateRequest.getLiveExperience("ReputationFF").get()
+                (exp.getName match {
+                  case "Qualified" => Books.get(bookId.toInt)
+                  case "Disqualified" => Books.getWithReputation(bookId.toInt)
+                })
+                  // Commit or fail state request
+                  .transform(Variant.responseTransformer(stateRequest))
+              case None =>
+                // We didn't get a state request. Variant server may be down, or the feature flag we anticipated
+                // may be offline. Defaulting to disqualification, i.e. control experience")
+                Books.get(bookId.toInt)
+            }
+          }
         }
       }
     )
@@ -52,13 +69,12 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
         path(Segment) { copyId =>
           put {
             // Put hold on a book copy.
+            // Instrument a Variant experiment.
             implicit ctx => action {
-              // Instrument a Variant experiment.
               Variant.targetForState("Checkout") match {
-
                 case Some(stateRequest) =>
-                  // All went well and we have the state request.
-                  val exp = stateRequest.getLiveExperiences.asScala.head
+                  // All went well and we have a state request.
+                  val exp = stateRequest.getLiveExperience("Suggestions").get;
                   logger.debug(s"Targeted for experience $exp")
                   (exp.getName match {
                     case "NoSuggestions" => Copies.hold(copyId.toInt)
@@ -66,7 +82,6 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
                   })
                     // Commit or fail state request
                     .transform(Variant.responseTransformer(stateRequest))
-
                 case None =>
                   // We didn't get a state request. Variant server may be down, or the experiment we anticipated
                   // may be offline. Defaulting to control")
