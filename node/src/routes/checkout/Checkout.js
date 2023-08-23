@@ -18,8 +18,6 @@ export function Checkout() {
       const bookDetails = JSON.parse(localStorage.getItem('book'));
       const book = bookDetails.book;
       const copy = bookDetails.availableCopies.find(elem => elem.id == params.id);
-      const suggVisibility = receipt.suggestions ? 'default' : 'none'
-      const suggestions = receipt.suggestions ? receipt.suggestions : []
         return (
           <table className="book-detail">
             <tbody>
@@ -33,7 +31,12 @@ export function Checkout() {
                     <h4>ISBN: {book.isbn}</h4>
                     <h4>Publication Date: {bookDetails.book.pubDate}</h4>
                     <br/>
-                    Sold by <b>{copy.seller}</b> <span className="reputation">{'\u2605'.repeat(copy.reputation) + '\u2606'.repeat(5 - copy.reputation)}</span><br/>
+                    {receipt.withReputation &&
+                        <div>
+                            Sold by <b>{copy.seller}</b>
+                            <span className="reputation">{'\u2605'.repeat(copy.reputation) + '\u2606'.repeat(5 - copy.reputation)}</span>
+                        </div>
+                    }
                     Ships from <b>{copy.location}</b> in 2-5 business days
                     <br/>
                     <table className="bill">
@@ -54,7 +57,7 @@ export function Checkout() {
                       </tbody>
                     </table>
                     <button onClick={() => buy(copy)}>Buy</button>
-                    {receipt.suggestions &&
+                    {receipt.suggestions.length > 0 &&
                         <table>
                           <tbody>
                               <tr>
@@ -65,7 +68,7 @@ export function Checkout() {
                               </tr>
                               <tr>
                                 {
-                                  suggestions.map(
+                                  receipt.suggestions.map(
                                    book =>
                                     <td>
                                       <img width="60%" src={book.coverImageUri}/>
