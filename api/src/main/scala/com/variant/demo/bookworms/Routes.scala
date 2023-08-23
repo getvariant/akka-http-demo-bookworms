@@ -74,18 +74,15 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
               Variant.targetForState("Checkout") match {
                 case Some(stateRequest) =>
                   // All went well and we have a state request.
-                  val exp = stateRequest.getLiveExperience("Suggestions").get;
-                  logger.debug(s"Targeted for experience $exp")
-                  (exp.getName match {
-                    case "NoSuggestions" => Copies.hold(copyId.toInt)
-                    case "WithSuggestions" => Copies.holdWithSuggestions(copyId.toInt)
-                  })
+                  val withSuggestions = stateRequest.getLiveExperience("Suggestions").get.getName == "WithSuggestions"
+                  val withReputation = stateRequest.getLiveExperience("ReputationFF").get.getName == "Qualified"
+                  Copies.hold(copyId.toInt, withSuggestions, withReputation)
                     // Commit or fail state request
                     .transform(Variant.responseTransformer(stateRequest))
                 case None =>
-                  // We didn't get a state request. Variant server may be down, or the experiment we anticipated
-                  // may be offline. Defaulting to control")
-                  Copies.hold(copyId.toInt)
+                  // We didn't get a state request. Most likely cause is that Variant server is down.
+                  // Defaulting to the control experience with no SVE events logged."
+                  Copies.hold(copyId.toInt, withSuggestions = false, withReputation = false);
               }
             }
           }

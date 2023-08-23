@@ -54,28 +54,30 @@ export function Checkout() {
                       </tbody>
                     </table>
                     <button onClick={() => buy(copy)}>Buy</button>
-                    <table style={{'display': suggVisibility }}>
-                      <tbody>
-                          <tr>
-                            <td colSpan="3">
-                              Customers who bought <b>{book.title}</b><br/>
-                              also bought:
-                            </td>
-                          </tr>
-                          <tr>
-                            {
-                              suggestions.map(
-                               book =>
-                                <td>
-                                  <img width="60%" src={book.coverImageUri}/>
+                    {receipt.suggestions &&
+                        <table>
+                          <tbody>
+                              <tr>
+                                <td colSpan="3">
+                                  Customers who bought <b>{book.title}</b><br/>
+                                  also bought:
                                 </td>
-                              )
-                            }
-                          </tr>
-                          <tr>
-                          </tr>
-                      </tbody>
-                    </table>
+                              </tr>
+                              <tr>
+                                {
+                                  suggestions.map(
+                                   book =>
+                                    <td>
+                                      <img width="60%" src={book.coverImageUri}/>
+                                    </td>
+                                  )
+                                }
+                              </tr>
+                              <tr>
+                              </tr>
+                          </tbody>
+                        </table>
+                    }
                   </td>
                 </tr>
             </tbody>

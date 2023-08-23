@@ -29,27 +29,29 @@ object Copies extends Endpoint {
    * of time to avoid shopping cart collisions. An async process would be needed to clear
    * holds on books that didn't end up being purchased.
    */
-  def hold(copyId: Int)(implicit ec: ExecutionContext): Future[HttpResponse] =
-    Postgres.getCopy(copyId)
-      .map {
-        case Some(copy) => respondOk(receiptFor(copy))
-        case None => respondBadRequest(s"No copy with ID $copyId")
-      }
+  def hold(copyId: Int, withSuggestions: Boolean, withReputation: Boolean)(implicit ec: ExecutionContext): Future[HttpResponse] = {
+    val suggestionsF: Future[Seq[Book]] =
+      if (withSuggestions) Postgres.getBooks
+      else Future.successful(Seq.empty)
 
-  // Treatment code path
-  def holdWithSuggestions(copyId: Int)(implicit ec: ExecutionContext): Future[HttpResponse] = {
     for {
       copyOpt <- Postgres.getCopy(copyId)
-      books <- Postgres.getBooks
+      suggestions <- suggestionsF
     } yield {
-      val suggestions = Random.shuffle(books).take(3)
       copyOpt match {
-        case Some(copy) => respondOk(ReceiptWithSuggestions.fromReceipt(receiptFor(copy), suggestions))
+        case Some(copy) =>
+          var receipt = receiptFor(copy)
+          if (withReputation) {
+            receipt = receipt.copy(withReputation = true)
+          }
+          if (withSuggestions) {
+            receipt.copy(suggestions = Random.shuffle(suggestions).take(3))
+          }
+          respondOk(receipt)
         case None => respondBadRequest(s"No copy with ID $copyId")
       }
     }
   }
-
 
   def update(copy: Copy)(implicit ec: ExecutionContext): Future[HttpResponse] =
     Postgres.updateCopy(copy)
