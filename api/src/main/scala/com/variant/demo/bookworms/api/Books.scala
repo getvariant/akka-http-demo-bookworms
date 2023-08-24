@@ -14,13 +14,12 @@ object Books extends Endpoint {
     Postgres.getBooks.map(respondOk(_))
 
   /** Get a book's details */
-  def get(bookId: Int)(implicit ec: ExecutionContext): Future[HttpResponse] =
-    Postgres.getBookDetails(bookId).map(respondOk(_))
+  def get(bookId: Int, withReputation: Boolean = false)(implicit ec: ExecutionContext): Future[HttpResponse] =
+    if (withReputation)
+      Postgres.getBookDetails(bookId)
+        .map { _.map { bookDetails => BookDetailsWithReputation(bookDetails) } }
+        .map(respondOk(_))
+    else
+      Postgres.getBookDetails(bookId).map(respondOk(_))
 
-  /** Simulate the new book details code path that includes the seller's reputation */
-  def getWithReputation(bookId: Int)(implicit ec: ExecutionContext): Future[HttpResponse] = {
-    Postgres.getBookDetails(bookId)
-      .map { _.map { bookDetails => BookDetailsWithReputation(bookDetails) }}
-      .map(respondOk(_))
-  }
 }

@@ -33,8 +33,7 @@ function UserSelector() {
               <option value="Everyman">Everyman</option>
               <option value="WithSuggestions">WithSuggestions</option>
               <option value="NoSuggestions">NoSuggestions</option>
-              <option value="Qualified">Qualified</option>
-              <option value="Disqualified">Disqualified</option>
+              <option value="WithReputation">WithReputation</option>
             </select>
             </label>
         );

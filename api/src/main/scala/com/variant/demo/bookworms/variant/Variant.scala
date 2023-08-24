@@ -4,10 +4,15 @@ import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.server.RequestContext
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
-import com.variant.client.{Connection, StateRequest, VariantClient}
+import com.variant.client.{Connection, ServerConnectException, StateRequest, VariantClient}
+import com.variant.demo.bookworms.UserRegistry
+import com.variant.demo.bookworms.api.Users
 
 import scala.util.{Failure, Success, Try}
 
+/**
+ * A few general purpose helper functions.
+ */
 object Variant extends LazyLogging {
 
   private val config = ConfigFactory.load()
@@ -26,6 +31,9 @@ object Variant extends LazyLogging {
         Some(result)
       }
       catch {
+        case sce: ServerConnectException =>
+          logger.error(sce.getMessage)
+          None
         case t: Throwable =>
           logger.error("Failed to connect to Variant URI [" + uri + "]", t)
           None
@@ -40,11 +48,16 @@ object Variant extends LazyLogging {
       myState <- ssn.getSchema.getState(name).toScala
     }
     yield {
+      ssn.getAttributes.put("user", UserRegistry.currentUser)
       ssn.targetForState(myState)
     }
   }
 
-  def responseTransformer(req: StateRequest): Try[HttpResponse] => Try[HttpResponse] = {
+  def isExperienceLive(stateRequest: StateRequest, variationName: String, experienceName: String): Boolean = {
+    stateRequest.getLiveExperience(variationName).stream().anyMatch(exp => exp.getName == experienceName)
+  }
+
+  def commitOrFail(req: StateRequest): Try[HttpResponse] => Try[HttpResponse] = {
     case Success(goodHttpResponse) =>
       val wrapper = Array(goodHttpResponse)
       req.commit(wrapper)

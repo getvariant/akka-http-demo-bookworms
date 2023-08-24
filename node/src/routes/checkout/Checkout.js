@@ -70,8 +70,8 @@ export function Checkout() {
                                 {
                                   receipt.suggestions.map(
                                    book =>
-                                    <td>
-                                      <img width="60%" src={book.coverImageUri}/>
+                                    <td >
+                                      <img width="160px" src={book.coverImageUri}/>
                                     </td>
                                   )
                                 }

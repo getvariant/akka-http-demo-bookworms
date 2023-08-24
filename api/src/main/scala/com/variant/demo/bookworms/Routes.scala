@@ -4,12 +4,10 @@ import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.{RequestContext, Route, RouteResult}
 import com.typesafe.scalalogging.LazyLogging
-import com.variant.demo.bookworms.api.{Books, Copies, Root}
-import com.variant.demo.bookworms.variant.Variant
+import com.variant.demo.bookworms.api.{Books, Copies, Root, Users}
+import com.variant.demo.bookworms.variant.Variant._
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.jdk.CollectionConverters._
-import scala.jdk.OptionConverters._
 
 class Routes(implicit ec: ExecutionContext) extends LazyLogging {
 
@@ -34,16 +32,11 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
       path(Segment) { bookId =>
         get {
           implicit ctx => action {
-            Variant.targetForState("BookDetails") match {
+            targetForState("BookDetails") match {
               case Some(stateRequest) =>
                 // All went well and we have a state request
-                val exp = stateRequest.getLiveExperience("ReputationFF").get()
-                (exp.getName match {
-                  case "NoReputation" => Books.get(bookId.toInt)
-                  case "WithReputation" => Books.getWithReputation(bookId.toInt)
-                })
-                  // Commit or fail state request
-                  .transform(Variant.responseTransformer(stateRequest))
+                val withReputation = isExperienceLive(stateRequest,"ReputationFF","WithReputation")
+                Books.get(bookId.toInt, withReputation).transform(commitOrFail(stateRequest))
               case None =>
                 // We didn't get a state request. Variant server may be down, or the feature flag we anticipated
                 // may be offline. Defaulting to disqualification, i.e. control experience")
@@ -71,14 +64,12 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
             // Put hold on a book copy.
             // Instrument a Variant experiment.
             implicit ctx => action {
-              Variant.targetForState("Checkout") match {
+              targetForState("Checkout") match {
                 case Some(stateRequest) =>
                   // All went well and we have a state request.
-                  val withSuggestions = stateRequest.getLiveExperience("Suggestions").get.getName == "WithSuggestions"
-                  val withReputation = stateRequest.getLiveExperience("ReputationFF").get.getName == "Qualified"
-                  Copies.hold(copyId.toInt, withSuggestions, withReputation)
-                    // Commit or fail state request
-                    .transform(Variant.responseTransformer(stateRequest))
+                  val withSuggestions = isExperienceLive(stateRequest,"Suggestions","WithSuggestions")
+                  val withReputation = isExperienceLive(stateRequest, "ReputationFF", "WithReputation")
+                  Copies.hold(copyId.toInt, withSuggestions, withReputation).transform(commitOrFail(stateRequest))
                 case None =>
                   // We didn't get a state request. Most likely cause is that Variant server is down.
                   // Defaulting to the control experience with no SVE events logged."

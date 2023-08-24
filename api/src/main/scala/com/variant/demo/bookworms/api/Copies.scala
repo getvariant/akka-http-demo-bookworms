@@ -45,7 +45,7 @@ object Copies extends Endpoint {
             receipt = receipt.copy(withReputation = true)
           }
           if (withSuggestions) {
-            receipt.copy(suggestions = Random.shuffle(suggestions).take(3))
+            receipt = receipt.copy(suggestions = Random.shuffle(suggestions).take(3))
           }
           respondOk(receipt)
         case None => respondBadRequest(s"No copy with ID $copyId")
