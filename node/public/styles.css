@@ -11,6 +11,9 @@ header {
   min-height: 120px;
 }
 
+body {
+    font-size: 14px;
+}
 header img {
     float: left;
     width: 180px;
@@ -34,18 +37,19 @@ header h2 {
 }
 
 h2 {
+  font-size: 16px;
   margin: 15px 0;
   display: inline-block;
 }
 
 h3 {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 500;
   margin: 5px;
 }
 
 h4 {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   margin: 5px;
 }
