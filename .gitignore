@@ -10,3 +10,4 @@ api/project/
 /node/package-lock.json
 /node/package.json
 /node/project/
+variant/target
