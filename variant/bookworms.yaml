@@ -20,6 +20,7 @@ variations:
       - name: NoSuggestions
         isControl: true
       - name: WithSuggestions
+        weight: 999
     onStates:
       - state: Checkout
   # Feature Flag gating access to the reputation feature on the book detail
@@ -28,6 +29,9 @@ variations:
   - name: ReputationFF
     hooks:
       - class: com.variant.demo.bookworms.spi.UserQualificationHook
+    # Visitors are re-qualified on each visit to the site.
+    durability:
+      qualification: session
     experiences:
       - name: WithReputation
         isControl: true
