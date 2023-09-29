@@ -1,11 +1,8 @@
 package com.variant.demo.bookworms.spi;
 
-import com.variant.server.api.Session;
-import com.variant.server.api.lifecycle.VariationTargetingLifecycleEvent;
-import com.variant.server.api.lifecycle.VariationTargetingLifecycleHook;
+import com.variant.server.spi.lifecycle.VariationTargetingLifecycleEvent;
+import com.variant.server.spi.lifecycle.VariationTargetingLifecycleHook;
 import com.variant.share.schema.Variation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 

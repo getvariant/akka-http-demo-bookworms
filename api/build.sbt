@@ -1,7 +1,7 @@
 lazy val akkaHttpVersion = "10.4.0"
 lazy val akkaVersion = "2.7.0"
 lazy val circeVersion = "0.14.3"
-lazy val variantVersion = "0.10.3"
+lazy val variantVersion = "1.0.1"
 
 // Run in a separate JVM, to make sure sbt waits until all threads have
 // finished before returning.
@@ -12,7 +12,8 @@ fork := true
 lazy val root = (project in file("."))
   .settings(
     inThisBuild(List(
-      organization    := "variant",
+      organization    := "com.variant",
+      version         := variantVersion,
       scalaVersion    := "2.13.4"
     )),
     name := "bookworms",
@@ -40,7 +41,7 @@ lazy val root = (project in file("."))
       "io.circe" %% "circe-parser" % circeVersion,
 
       // Variant client
-      "com.variant" % "variant-java-client" % "1.0.0",
+      "com.variant" % "variant-java-client" % variantVersion,
       // TODO: Figure out why sbt does not download Fasterxml jars even though they are
       //       listed as dependencies by Java Client
       "com.fasterxml.jackson.core" % "jackson-core" % "2.13.4",

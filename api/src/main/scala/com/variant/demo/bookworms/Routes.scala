@@ -39,7 +39,7 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
                 Books.get(bookId.toInt, withReputation).transform(commitOrFail(stateRequest))
               case None =>
                 // We didn't get a state request. Variant server may be down, or the feature flag we anticipated
-                // may be offline. Defaulting to disqualification, i.e. control experience")
+                // may be offline. Defaulting to NoReputation)
                 Books.get(bookId.toInt)
             }
           }

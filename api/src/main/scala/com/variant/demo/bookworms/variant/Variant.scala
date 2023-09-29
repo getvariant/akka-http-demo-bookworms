@@ -8,6 +8,7 @@ import com.variant.client.{Connection, ServerConnectException, StateRequest, Var
 import com.variant.demo.bookworms.UserRegistry
 import com.variant.demo.bookworms.api.Users
 
+import java.util.Optional
 import scala.util.{Failure, Success, Try}
 
 /**
@@ -43,13 +44,17 @@ object Variant extends LazyLogging {
 
   def targetForState(name: String)(implicit ctx: RequestContext): Option[StateRequest] = {
     import scala.jdk.OptionConverters._
-    for {
-      ssn <- connection().map(_.getOrCreateSession(ctx.request))
-      myState <- ssn.getSchema.getState(name).toScala
-    }
-    yield {
-      ssn.getAttributes.put("user", UserRegistry.currentUser)
-      ssn.targetForState(myState)
+    try {
+      for {
+        ssn <- connection().map(_.getOrCreateSession(ctx.request, Optional.of(UserRegistry.currentUser)))
+        myState <- ssn.getSchema.getState(name).toScala
+      }
+      yield {
+        ssn.getAttributes.put("user", UserRegistry.currentUser)
+        ssn.targetForState(myState)
+      }
+    } catch {
+      case _: ServerConnectException => None
     }
   }
 

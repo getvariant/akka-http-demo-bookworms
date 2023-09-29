@@ -21,7 +21,6 @@ variations:
       - name: NoSuggestions
         isControl: true
       - name: WithSuggestions
-        weight: 999
     onStates:
       - state: Checkout
   # Feature Flag gating access to the reputation feature on the book detail
@@ -29,9 +28,8 @@ variations:
   # "WithReputation" into the feature.
   - name: ReputationFF
     conjointVariations: [Suggestions]
-    # Visitors are re-qualified on each visit to the site. (TBI)
     durability:
-      qualification: session
+
     experiences:
       - name: NoReputation
         isControl: true

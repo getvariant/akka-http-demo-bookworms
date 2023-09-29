@@ -10,7 +10,7 @@
     
 	<properties>
     	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <variant.version>1.0.0</variant.version>
+        <variant.version>1.0.1</variant.version>
     </properties>
 
     <name>Variant Server Standard SPI Standard Library</name>
@@ -18,17 +18,17 @@
 
     <groupId>com.variant</groupId>
     <artifactId>variant-demo-jdk-bookworms-spi</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <dependencies>
         
         <!--  Variant Server-side SPI.
               For now, bootstrapped from local JAR. -->
 		<dependency>
     		<groupId>com.variant</groupId>
-    		<artifactId>variant-server-spi</artifactId>
+    		<artifactId>variant-spi</artifactId>
     		<version>${variant.version}</version>
     		<scope>system</scope>
-		    <systemPath>${project.basedir}/lib/variant-server-spi-${variant.version}.jar</systemPath>
+		    <systemPath>${project.basedir}/lib/variant-spi-${variant.version}.jar</systemPath>
 		</dependency>
 
         <dependency>
