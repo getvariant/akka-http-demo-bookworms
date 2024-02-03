@@ -26,7 +26,7 @@ object Main {
   }
 
   def main(args: Array[String]): Unit = {
-    implicit val system = ActorSystem("HelloAkkaHttpServer")
+    implicit val system = ActorSystem("VariantDemoBookwormsAPI")
     val routes = new Routes()(system.dispatcher)
     startHttpServer(routes.routes)
 

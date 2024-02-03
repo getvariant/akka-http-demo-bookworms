@@ -54,6 +54,7 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
           put {
             entity(as[String]) {
               body =>
+                throw new Exception("Checking if this endpoint is ever called.")
                 onSuccess(withBodyAs[Copy](body)(Copies.update))(resp => complete(resp))
             }
           }

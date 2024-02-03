@@ -13,6 +13,7 @@ states:
   - name: Checkout
 
 variations:
+
   # A/B Test of adding suggestions to the checkout page. Default random targeting,
   # unless user is "WithSuggestions" who is always targeted to the WithSuggestions
   # experience as a matter of demonstrating targeting hook.
@@ -23,13 +24,12 @@ variations:
       - name: WithSuggestions
     onStates:
       - state: Checkout
+
   # Feature Flag gating access to the reputation feature on the book detail
   # and the checkout pages. ReputationQualificationHook will only allow user
   # "WithReputation" into the feature.
   - name: ReputationFF
     conjointVariations: [Suggestions]
-    durability:
-
     experiences:
       - name: NoReputation
         isControl: true

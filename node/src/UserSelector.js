@@ -26,7 +26,6 @@ function UserSelector() {
             <label id={'user-select'}>
             Current user:
             <select
-
               value={currentUser}
               onChange={e => onChangeListener(e)}
             >
