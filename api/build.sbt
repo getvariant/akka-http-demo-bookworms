@@ -41,7 +41,7 @@ lazy val root = (project in file("."))
       "io.circe" %% "circe-parser" % circeVersion,
 
       // Variant client
-      "com.variant" % "variant-java-client" % variantVersion,
+      //"com.variant" % "variant-java-client" % variantVersion,
       // TODO: Figure out why sbt does not download Fasterxml jars even though they are
       //       listed as dependencies by Java Client
       "com.fasterxml.jackson.core" % "jackson-core" % "2.13.4",

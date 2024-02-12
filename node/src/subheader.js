@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { getUser, setUser } from "./backend.js";
+import { getUser, setUser, getPromoMessage } from "./backend.js";
 
-function UserSelector() {
+export function UserSelector() {
 
     function onChangeListener(e) {
         // Change user on the server
@@ -40,4 +40,24 @@ function UserSelector() {
     }
 }
 
-export default UserSelector;
+export function PromoMessage() {
+
+    const [promoMessage, setPromoMessage] = useState(null);
+    useEffect(() => {
+        const fetchData = async () => {
+          const promoMessage = await getPromoMessage()
+          setPromoMessage(promoMessage)
+        };
+        fetchData()
+      }, []);
+
+    if (promoMessage) {
+        return (
+            <div id={'promo'}>
+                {promoMessage}
+            </div>
+        );
+    } else {
+        return null;
+    }
+}

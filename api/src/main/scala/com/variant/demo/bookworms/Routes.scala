@@ -4,7 +4,7 @@ import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.{RequestContext, Route, RouteResult}
 import com.typesafe.scalalogging.LazyLogging
-import com.variant.demo.bookworms.api.{Books, Copies, Root, Users}
+import com.variant.demo.bookworms.api.{Books, Copies, Promo, Root, Users}
 import com.variant.demo.bookworms.variant.Variant._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -51,15 +51,14 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
   private val copiesRoutes = pathPrefix("copies") {
       concat(
         pathEndOrSingleSlash {
+          // Buy a copy.
           put {
             entity(as[String]) {
               body =>
-                throw new Exception("Checking if this endpoint is ever called.")
                 onSuccess(withBodyAs[Copy](body)(Copies.update))(resp => complete(resp))
             }
           }
-        }
-        ,
+        },
         path(Segment) { copyId =>
           put {
             // Put hold on a book copy.
@@ -99,8 +98,19 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
     )
   }
 
+  private val promoRoutes = pathPrefix("promo") {
+    concat(
+      pathEndOrSingleSlash {
+        // Current promo message, if any
+        get {
+          implicit ctx => action { Promo.getPromoMessage }
+        }
+      }
+    )
+  }
+
   def routes: Route = {
-      rootRoutes ~ booksRoutes ~ copiesRoutes ~ userRoutes
+      rootRoutes ~ booksRoutes ~ copiesRoutes ~ userRoutes ~ promoRoutes
   }
 }
 

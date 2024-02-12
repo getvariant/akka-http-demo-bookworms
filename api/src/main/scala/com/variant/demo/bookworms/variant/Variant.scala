@@ -4,12 +4,12 @@ import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.server.RequestContext
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
-import com.variant.client.{Connection, ServerConnectException, StateRequest, VariantClient}
+import com.variant.client.{Connection, ServerConnectException, StateRequest, VariantClient, Session}
 import com.variant.demo.bookworms.UserRegistry
-import com.variant.demo.bookworms.api.Users
 
 import java.util.Optional
 import scala.util.{Failure, Success, Try}
+import scala.jdk.OptionConverters._
 
 /**
  * A few general purpose helper functions.
@@ -40,6 +40,10 @@ object Variant extends LazyLogging {
           None
       }
     _connection
+  }
+
+  def currVariantSession(implicit ctx: RequestContext): Option[Session] = {
+    connection().flatMap(_.getSession(ctx.request, Optional.of(UserRegistry.currentUser)).toScala)
   }
 
   def targetForState(name: String)(implicit ctx: RequestContext): Option[StateRequest] = {

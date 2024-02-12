@@ -33,3 +33,7 @@ export function getUser() {
 export function setUser(name) {
   return fetch(`${url}/user/${name}`, {"method": "PUT"});
 }
+
+export function getPromoMessage() {
+  return fetch(`${url}/promo`).then(resp => resp.json());
+}

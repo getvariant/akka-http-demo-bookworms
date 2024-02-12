@@ -3,12 +3,13 @@ import { Routes, Route } from "react-router-dom";
 import {Books} from "./routes/root/Books";
 import {BookDetails} from "./routes/books/BookDetails";
 import {Checkout} from "./routes/checkout/Checkout";
-import UserSelector from "./UserSelector"
+import {UserSelector, PromoMessage} from "./subheader"
 
 function Router() {
     return (
         <div>
             <UserSelector />
+            <PromoMessage />
             <Routes>
                 <Route path="/" element={<Books />} />
                 <Route path="books/:id" element={<BookDetails />} />
