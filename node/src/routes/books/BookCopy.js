@@ -1,7 +1,5 @@
 
 export function BookCopy({copy, withReputation}) {
-console.log(copy)
-console.log(withReputation)
     return (
         <tr key={copy.id}>
             <td>{copy.condition}</td>

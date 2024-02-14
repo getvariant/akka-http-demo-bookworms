@@ -15,7 +15,9 @@ public class ReputationFFQualificationHook implements VariationQualificationLife
 	@Override
 	public Optional<Boolean> post(VariationQualificationLifecycleEvent event) {
 		var qualified = "WithReputation".equals(event.getSession().getOwnerId().get());
-		var traceMessage = String.format("%s user '%s'", qualified ? "Qualified" : "Disqualified", event.getSession().getAttributes().get("user"));
+		var traceMessage = String.format(
+			"Hook %s: %s user '%s'",
+			getClass().getSimpleName(), qualified ? "Qualified" : "Disqualified", event.getSession().getOwnerId());
 		event.getSession().triggerEvent(TraceEvent.of(traceMessage));
 		return Optional.of(qualified);
 	}

@@ -5,8 +5,16 @@ export function UserSelector() {
 
     // Make the new select setting stick on the server
     function onUserChange(e) {
+       // Change user on the server
+       setUser(e.target.value);
+       destroyVariantSession()
+       setCurrentUser(e.target.value)
+       window.location.reload()
+    }
+
+    function onUserRelogin() {
         destroyVariantSession()
-        setCurrentUser(e.target.value);
+        window.location.reload()
     }
 
     // Close current variant session by deleting the session id cookie.
@@ -34,7 +42,7 @@ export function UserSelector() {
               <option value="NoReputation">NoReputation</option>
               <option value="WithReputation">WithReputation</option>
             </select>
-            <a href="#" onClick={e => destroyVariantSession()}>Re-login</a>
+            <a href="#" onClick={e => onUserRelogin()}>Re-login</a>
             </label>
         );
     } else {

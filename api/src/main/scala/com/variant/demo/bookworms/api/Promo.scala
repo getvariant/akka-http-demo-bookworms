@@ -18,7 +18,7 @@ object Promo extends Endpoint {
       } yield {
         s"Free shipping on orders over $$${threshold}"
       }
-    Future.successful(respondOk(promoMessage.getOrElse("Nothing")))
+    Future.successful(respondOk(promoMessage.getOrElse("")))
   }
 
 }

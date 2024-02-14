@@ -16,7 +16,7 @@ export function PromoMessage() {
             setPromoMessage(promoMessage)
           };
           fetchData()
-        }, 200)
+        }, 500)
       }, []);
 
     if (promoMessage) {
