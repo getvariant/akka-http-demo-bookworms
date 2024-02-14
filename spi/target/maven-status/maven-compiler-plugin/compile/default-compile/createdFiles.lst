@@ -1,1 +1,2 @@
-com/variant/demo/bookworms/spi/UserTargetingHook.class
+com/variant/demo/bookworms/spi/ReputationFFQualificationHook.class
+com/variant/demo/bookworms/spi/FreeShippingExpQualificationHook.class

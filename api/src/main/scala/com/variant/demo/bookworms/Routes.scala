@@ -23,11 +23,19 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
   private val booksRoutes = pathPrefix("books") {
     concat(
       pathEnd {
-        concat(
-          get {
-            onSuccess(Books.get)(resp => complete(resp))
-          },
-        )
+        get {
+          implicit ctx => action {
+            targetForState("Home") match {
+              case Some(stateRequest) =>
+                // All went well and we have a state request
+                Books.get.transform(commitOrFail(stateRequest))
+              case None =>
+                // We didn't get a state request.Variant server may be down, or the feature flag we anticipated
+                // may be offline. Defaulting to no promo
+                Books.get
+            }
+          }
+        }
       },
       path(Segment) { bookId =>
         get {
@@ -103,7 +111,9 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
       pathEndOrSingleSlash {
         // Current promo message, if any
         get {
-          implicit ctx => action { Promo.getPromoMessage }
+          implicit ctx => action {
+            Promo.getPromoMessage
+          }
         }
       }
     )
@@ -131,7 +141,7 @@ object Routes extends LazyLogging {
         ctx.complete(
           HttpResponse(
             StatusCodes.BadRequest,
-            entity = s"Something's rotten in the Kingdom of Denmark:\n${t.getMessage}"))
+            entity = s"Something's rotten in the state of Denmark:\n${t.getMessage}"))
     }
   }
 

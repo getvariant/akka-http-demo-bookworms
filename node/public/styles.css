@@ -68,7 +68,14 @@ code {
     monospace;
 }
 
-#user-select {
+div#promo {
+  font-size: 20px;
+  color: darkgreen;
+  font-weight: 600;
+
+}
+
+label#user-select {
     float: right;
     font-size: 16px;
     color: black;

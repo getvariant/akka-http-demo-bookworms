@@ -6,8 +6,9 @@ import com.variant.demo.bookworms.UserRegistry
 object Users extends Endpoint {
   def getUser: HttpResponse = respondOk(UserRegistry.currentUser)
 
-  def setUser(user: String): HttpResponse = {
+  def setUser(user: String, inactive: Boolean = true): HttpResponse = {
     UserRegistry.currentUser = user
+    UserRegistry.isInactive = true
     respondOk()
   }
 }

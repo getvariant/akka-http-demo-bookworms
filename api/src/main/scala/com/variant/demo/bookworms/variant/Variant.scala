@@ -42,19 +42,21 @@ object Variant extends LazyLogging {
     _connection
   }
 
-  def currVariantSession(implicit ctx: RequestContext): Option[Session] = {
-    connection().flatMap(_.getSession(ctx.request, Optional.of(UserRegistry.currentUser)).toScala)
+  def thisVariantSession(implicit ctx: RequestContext): Option[Session] = {
+    connection().flatMap(_.getSession(ctx.request).toScala)
   }
 
   def targetForState(name: String)(implicit ctx: RequestContext): Option[StateRequest] = {
     import scala.jdk.OptionConverters._
     try {
       for {
-        ssn <- connection().map(_.getOrCreateSession(ctx.request, Optional.of(UserRegistry.currentUser)))
+        ssn <- connection().map(
+          conn =>
+            conn.getOrCreateSession(ctx.request, Optional.of(UserRegistry.currentUser)))
         myState <- ssn.getSchema.getState(name).toScala
       }
       yield {
-        ssn.getAttributes.put("user", UserRegistry.currentUser)
+        ssn.getAttributes.put("isInactive", UserRegistry.isInactive.toString)
         ssn.targetForState(myState)
       }
     } catch {

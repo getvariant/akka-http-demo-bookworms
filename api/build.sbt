@@ -1,7 +1,7 @@
 lazy val akkaHttpVersion = "10.4.0"
 lazy val akkaVersion = "2.7.0"
 lazy val circeVersion = "0.14.3"
-lazy val variantVersion = "1.0.1"
+lazy val variantVersion = "1.0.1-RC1"
 
 // Run in a separate JVM, to make sure sbt waits until all threads have
 // finished before returning.
@@ -16,7 +16,7 @@ lazy val root = (project in file("."))
       version         := variantVersion,
       scalaVersion    := "2.13.4"
     )),
-    name := "bookworms",
+    name := "bookworms-api",
 
     // Add local Maven repo for com.variant.share artifacts built with Maven.
     resolvers += Resolver.mavenLocal,
@@ -28,7 +28,6 @@ lazy val root = (project in file("."))
       "com.typesafe.akka" %% "akka-actor" % akkaVersion,
       "com.typesafe.akka" %% "akka-stream" % akkaVersion,
       "ch.qos.logback" % "logback-classic" % "1.2.11",
-//      "ch.megard" %% "akka-http-cors" % "1.2.0",
 
       "com.typesafe.scala-logging" %% "scala-logging" % "3.9.4",
       "com.typesafe.slick" %% "slick" % "3.4.1",
@@ -41,7 +40,7 @@ lazy val root = (project in file("."))
       "io.circe" %% "circe-parser" % circeVersion,
 
       // Variant client
-      //"com.variant" % "variant-java-client" % variantVersion,
+      "com.variant" % "variant-java-client" % variantVersion,
       // TODO: Figure out why sbt does not download Fasterxml jars even though they are
       //       listed as dependencies by Java Client
       "com.fasterxml.jackson.core" % "jackson-core" % "2.13.4",
@@ -57,6 +56,6 @@ lazy val root = (project in file("."))
       "org.scalatest" %% "scalatest" % "3.2.9" % Test
     ),
     // To debug, uncomment and connect with eclipse after the VM is suspended.
-    // Test / javaOptions ++= Seq("-Xdebug",  "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000")
+    //javaOptions ++= Seq("-Xdebug",  "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005")
   )
 

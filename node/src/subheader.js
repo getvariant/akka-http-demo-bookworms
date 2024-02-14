@@ -29,8 +29,7 @@ export function UserSelector() {
               value={currentUser}
               onChange={e => onChangeListener(e)}
             >
-              <option value="Everyman">Everyman</option>
-              <option value="WithSuggestions">WithSuggestions</option>
+              <option value="NoReputation">NoReputation</option>
               <option value="WithReputation">WithReputation</option>
             </select>
             </label>

@@ -5,8 +5,6 @@ name: bookworms
 description: Variant experiment schema for the Bookworms demo application
 flusher:
   class: com.variant.spi.stdlib.flush.TraceEventFlusherCsv
-hooks:
-  - class: com.variant.demo.bookworms.spi.UserTargetingHook
 
 states:
   - name: Home
@@ -15,33 +13,37 @@ states:
 
 variations:
 
-  # A/B Test of adding suggestions to the checkout page. Default random targeting,
-  # unless user is "WithSuggestions" who is always targeted to the WithSuggestions
-  # experience as a matter of demonstrating targeting hook.
+  # Testing offers of free shipping to low-engagement customers with multiple
+  # minimal order thresholds.
   - name: FreeShippingExp
     experiences:
       - name: Nada
         isControl: true
       - name: On50
         parameters:
-          amount: 50
+          threshold: 50
       - name: On100
         parameters:
-          amount: 100
+          threshold: 100
     onStates:
       - state: Home
       - state: BookDetails
       - state: Checkout
+    durability:
+      qualification: state
+    hooks:
+      - class: com.variant.demo.bookworms.spi.FreeShippingExpQualificationHook
 
   # Feature Flag gating access to the reputation feature on the book detail
   # and the checkout pages. ReputationQualificationHook will only allow user
   # "WithReputation" into the feature.
   - name: ReputationFF
-    concurrentVariations: [Suggestions]
+    concurrentVariations: [FreeShippingExp]
     experiences:
-      - name: NoReputation
-        isControl: true
       - name: WithReputation
+        isControl: true
     onStates:
-    - state: BookDetails
-    - state: Checkout
+      - state: BookDetails
+      - state: Checkout
+    hooks:
+      - class: com.variant.demo.bookworms.spi.ReputationFFQualificationHook

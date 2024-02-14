@@ -1,1 +1,2 @@
-/Users/igor/work/src/variant-demo-jvm-bookworms/spi/src/main/java/com/variant/demo/bookworms/spi/UserTargetingHook.java
+/Users/igor/work/src/variant-demo-jvm-bookworms/spi/src/main/java/com/variant/demo/bookworms/spi/ReputationFFQualificationHook.java
+/Users/igor/work/src/variant-demo-jvm-bookworms/spi/src/main/java/com/variant/demo/bookworms/spi/FreeShippingExpQualificationHook.java

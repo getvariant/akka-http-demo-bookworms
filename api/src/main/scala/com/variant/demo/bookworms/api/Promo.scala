@@ -9,16 +9,19 @@ import scala.jdk.OptionConverters._
 
 object Promo extends Endpoint {
   def getPromoMessage(implicit req: RequestContext): Future[HttpResponse] = {
-    val minPurchaseDollar =
+    //println(req)
+    // This should not be called from a page that is not instrumented by the FreeShippingExp experiment,
+    // and thus the live experience already be in session.
+    val promoMessage =
       for {
-        ssn <- currVariantSession
+        ssn <- thisVariantSession
         req <- ssn.getStateRequest.toScala
         exp <- req.getLiveExperience("FreeShippingExp").toScala
+        threshold <- Option(exp.getParameters.get("threshold"))
       } yield {
-        null
+        s"Free shipping on orders over $$${threshold}"
       }
-
-    Future.successful(respondOk("Free shipping on order ..."))
+    Future.successful(respondOk(promoMessage.getOrElse("Nothing")))
   }
 
 }
