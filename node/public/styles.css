@@ -69,10 +69,15 @@ code {
 }
 
 div#promo {
+  height: 20px;
   font-size: 20px;
   color: darkgreen;
   font-weight: 600;
   animation: fadeIn 2s;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+  background-color: aliceblue;
 }
 @keyframes fadeIn {
   0% { opacity: 0; }

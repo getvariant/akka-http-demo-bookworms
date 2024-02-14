@@ -13,19 +13,13 @@ export function PromoMessage() {
         () => {
           const fetchData = async () => {
             const promoMessage = await getPromoMessage()
-            setPromoMessage(promoMessage)
+            document.getElementById("promo").innerHTML = promoMessage
           };
           fetchData()
         }, 500)
       }, []);
 
-    if (promoMessage) {
-        return (
-            <div id={'promo'}>
-                {promoMessage}
-            </div>
-        );
-    } else {
-        return null;
-    }
+    return (
+        <div id={'promo'}></div>
+    );
 }

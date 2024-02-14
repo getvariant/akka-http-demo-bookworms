@@ -5,9 +5,9 @@
 *.bsp/
 api/target/
 api/project/
+spi/target
 /node/node_modules/
 /node/target/
 /node/package-lock.json
 /node/package.json
 /node/project/
-variant/target
