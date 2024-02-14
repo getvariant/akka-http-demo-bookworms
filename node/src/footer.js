@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
-import { getUser, setUser, getPromoMessage } from "./backend.js";
+import { getUser, setUser } from "./backend.js";
 
 export function UserSelector() {
 
-    function onChangeListener(e) {
-        // Close current variant session by deleting the session id cookie.
-        document.cookie = "variant-ssnid=;host=loclhost;path=/;expires=" + new Date(0).toUTCString()
-        // Make the new select setting stick
+    // Make the new select setting stick on the server
+    function onUserChange(e) {
+        destroyVariantSession()
         setCurrentUser(e.target.value);
+    }
+
+    // Close current variant session by deleting the session id cookie.
+    function destroyVariantSession() {
+        document.cookie = "variant-ssnid=;host=loclhost;path=/;expires=" + new Date(0).toUTCString()
     }
 
     const [currentUser, setCurrentUser] = useState(null);
@@ -25,41 +29,13 @@ export function UserSelector() {
             Current user:
             <select
               value={currentUser}
-              onChange={e => onChangeListener(e)}
+              onChange={e => onUserChange(e)}
             >
               <option value="NoReputation">NoReputation</option>
               <option value="WithReputation">WithReputation</option>
             </select>
+            <a href="#" onClick={e => destroyVariantSession()}>Re-login</a>
             </label>
-        );
-    } else {
-        return null;
-    }
-}
-
-export function PromoMessage() {
-
-    // This API call happens outside the context of a particular page and concurrently with the main
-    // page API call. This presents a race condition: we want the main call to have completed and returned
-    // the session ID cookie before this call is made, so that the session ID cookie would be available on
-    // the backend of this call, so that Variant session, and with it the current state request be available.
-    const [promoMessage, setPromoMessage] = useState(null);
-    useEffect(() => {
-      setTimeout(
-        () => {
-          const fetchData = async () => {
-            const promoMessage = await getPromoMessage()
-            setPromoMessage(promoMessage)
-          };
-          fetchData()
-        }, 200)
-      }, []);
-
-    if (promoMessage) {
-        return (
-            <div id={'promo'}>
-                {promoMessage}
-            </div>
         );
     } else {
         return null;
