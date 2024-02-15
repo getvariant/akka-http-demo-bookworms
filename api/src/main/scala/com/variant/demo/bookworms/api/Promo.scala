@@ -14,11 +14,15 @@ object Promo extends Endpoint {
         ssn <- thisVariantSession
         req <- ssn.getStateRequest.toScala
         exp <- req.getLiveExperience("FreeShippingExp").toScala
-        threshold <- Option(exp.getParameters.get("threshold"))
       } yield {
-        s"Free shipping on orders over $$${threshold}"
+        Option(exp.getParameters.get("threshold")) match {
+          // We have the session and a non-control experience
+          case Some(threshold) => s"Free shipping on orders over $$${threshold}"
+          // Control Experience
+          case None => ""
+        }
       }
-    Future.successful(respondOk(promoMessage.getOrElse("")))
+    Future.successful(respondOk(promoMessage.getOrElse("repeat")))
   }
 
 }

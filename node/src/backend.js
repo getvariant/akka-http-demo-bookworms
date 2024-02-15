@@ -35,5 +35,5 @@ export function setUser(name) {
 }
 
 export function getPromoMessage() {
-  return fetch(`${url}/promo`).then(resp => resp.json());
+  return fetch(`${url}/promo`).then(resp => resp.json())
 }

@@ -29,10 +29,8 @@ object Copies extends Endpoint {
    * of time to avoid shopping cart collisions. An async process would be needed to clear
    * holds on books that didn't end up being purchased.
    */
-  def hold(copyId: Int, withSuggestions: Boolean, withReputation: Boolean)(implicit ec: ExecutionContext): Future[HttpResponse] = {
-    val suggestionsF: Future[Seq[Book]] =
-      if (withSuggestions) Postgres.getBooks
-      else Future.successful(Seq.empty)
+  def hold(copyId: Int, withReputation: Boolean)(implicit ec: ExecutionContext): Future[HttpResponse] = {
+    val suggestionsF: Future[Seq[Book]] = Postgres.getBooks
 
     for {
       copyOpt <- Postgres.getCopy(copyId)
@@ -44,9 +42,7 @@ object Copies extends Endpoint {
           if (withReputation) {
             receipt = receipt.copy(withReputation = true)
           }
-          if (withSuggestions) {
-            receipt = receipt.copy(suggestions = Random.shuffle(suggestions).take(3))
-          }
+          receipt = receipt.copy(suggestions = Random.shuffle(suggestions).take(3))
           respondOk(receipt)
         case None => respondBadRequest(s"No copy with ID $copyId")
       }

@@ -9,17 +9,24 @@ export function PromoMessage() {
     // the backend of this call, so that Variant session, and with it the current state request be available.
     const [promoMessage, setPromoMessage] = useState(null);
     useEffect(() => {
-      setTimeout(
-        () => {
-          const fetchData = async () => {
-            const promoMessage = await getPromoMessage()
-            document.getElementById("promo").innerHTML = promoMessage
-          };
-          fetchData()
-        }, 500)
+      const fetchData = async () => {
+        var fromServer = "repeat"
+        while (fromServer == "repeat") {
+          fromServer = await getPromoMessage()
+          console.log("*** " + fromServer)
+        }
+        setPromoMessage(fromServer)
+       }
+       fetchData()
       }, []);
 
-    return (
-        <div id={'promo'}></div>
-    );
+    if (promoMessage) {
+        return (
+            <div id={'promo'}>
+                {promoMessage}
+            </div>
+        );
+    } else {
+        return null;
+    }
 }

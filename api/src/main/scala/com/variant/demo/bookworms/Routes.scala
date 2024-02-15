@@ -70,18 +70,16 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
         path(Segment) { copyId =>
           put {
             // Put hold on a book copy.
-            // Instrument a Variant experiment.
             implicit ctx => action {
               targetForState("Checkout") match {
                 case Some(stateRequest) =>
                   // All went well and we have a state request.
-                  val withSuggestions = isExperienceLive(stateRequest,"Suggestions","WithSuggestions")
                   val withReputation = isExperienceLive(stateRequest, "ReputationFF", "WithReputation")
-                  Copies.hold(copyId.toInt, withSuggestions, withReputation).transform(commitOrFail(stateRequest))
+                  Copies.hold(copyId.toInt, withReputation).transform(commitOrFail(stateRequest))
                 case None =>
                   // We didn't get a state request. Most likely cause is that Variant server is down.
                   // Defaulting to the control experience with no SVE events logged."
-                  Copies.hold(copyId.toInt, withSuggestions = false, withReputation = false);
+                  Copies.hold(copyId.toInt, withReputation = false);
               }
             }
           }
