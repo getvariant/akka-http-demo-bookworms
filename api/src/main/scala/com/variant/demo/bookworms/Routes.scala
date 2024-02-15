@@ -63,7 +63,11 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
           put {
             entity(as[String]) {
               body =>
-                onSuccess(withBodyAs[Copy](body)(Copies.update))(resp => complete(resp))
+                onSuccess(withBodyAs[Copy](body)(Copies.update)){
+                  resp =>
+                    UserRegistry.isInactive = false
+                    complete(resp)
+                }
             }
           }
         },

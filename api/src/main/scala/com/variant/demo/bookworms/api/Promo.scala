@@ -9,8 +9,7 @@ import scala.jdk.OptionConverters._
 
 object Promo extends Endpoint {
   def getPromoMessage(implicit req: RequestContext): Future[HttpResponse] = {
-    val promoMessage =
-      for {
+    (for {
         ssn <- thisVariantSession
         req <- ssn.getStateRequest.toScala
         exp <- req.getLiveExperience("FreeShippingExp").toScala
@@ -21,8 +20,15 @@ object Promo extends Endpoint {
           // Control Experience
           case None => ""
         }
-      }
-    Future.successful(respondOk(promoMessage.getOrElse("repeat")))
+      }) match {
+      case Some (message) =>
+        // We have a usable message
+        Future.successful (respondOk (message))
+      case None =>
+        // We couldn't find variant session because the session ID cookie hasn't made it over
+        // to the server yet. This indicates to the client to retry this call.
+        Future.successful(respondNoContent())
+    }
   }
 
 }

@@ -34,6 +34,8 @@ export function setUser(name) {
   return fetch(`${url}/user/${name}`, {"method": "PUT"});
 }
 
-export function getPromoMessage() {
-  return fetch(`${url}/promo`).then(resp => resp.json())
+export async function getPromoMessage() {
+  const resp = await fetch(`${url}/promo`)
+  console.log(resp.status)
+  return resp.json()
 }
