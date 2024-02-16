@@ -17,7 +17,7 @@ export function putCopyHold(copyId) {
 /** Emulate purchase by making the copy unavailable. It will no longer be shown */
 export function buyCopy(copy) {
   copy.available = false;
-  fetch(
+  return fetch(
     `${url}/copies`,
     {
       headers: { 'Content-Type': 'application/json' },
@@ -35,7 +35,15 @@ export function setUser(name) {
 }
 
 export async function getPromoMessage() {
-  const resp = await fetch(`${url}/promo`)
-  console.log(resp.status)
-  return resp.json()
+  var retries = 0
+  while(retries < 100) {
+    const resp = await fetch(`${url}/promo`)
+    //console.log("*** " + resp.status)
+    if (resp.status == 200) return resp.json()
+    else if (resp.status == 204) retries++
+    else throw new Error("Unexpected response " + resp.status)
+  }
+  // If after this many retries we haven't gotten an OK response,
+  // we're assuming to have been disqualified.
+  return ""
 }

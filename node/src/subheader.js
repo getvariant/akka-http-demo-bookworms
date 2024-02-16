@@ -13,11 +13,7 @@ export function PromoMessage() {
     const [promoMessage, setPromoMessage] = useState(null);
     useEffect(() => {
       const fetchData = async () => {
-        var fromServer = "repeat"
-        while (fromServer == "repeat") {
-          fromServer = await getPromoMessage()
-          console.log(fromServer)
-        }
+        const fromServer = await getPromoMessage()
         setPromoMessage(fromServer)
        }
        fetchData()

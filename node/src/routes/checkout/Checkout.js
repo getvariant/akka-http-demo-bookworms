@@ -92,7 +92,6 @@ export function Checkout() {
 }
 
 function buy(copy) {
-  buyCopy(copy);
-  window.location="/";
+  buyCopy(copy).then(resp => window.location="/");
 }
 

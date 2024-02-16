@@ -25,8 +25,9 @@ object Promo extends Endpoint {
         // We have a usable message
         Future.successful (respondOk (message))
       case None =>
-        // We couldn't find variant session because the session ID cookie hasn't made it over
-        // to the server yet. This indicates to the client to retry this call.
+        // We either couldn't find variant session because the session ID cookie hasn't made it over
+        // to the server yet, or no live experience in the FreeShippingExp experiment because the session
+        // is disqualified for it. This indicates to the client to retry this call.
         Future.successful(respondNoContent())
     }
   }
