@@ -14,7 +14,6 @@ import java.util.Optional;
 public class FreeShippingExpQualificationHook implements VariationQualificationLifecycleHook {
 	@Override
 	public Optional<Boolean> post(VariationQualificationLifecycleEvent event) {
-		System.out.println(event.getSession().getAttributes().get("isInactive"));
 		var qualified = Boolean.valueOf(event.getSession().getAttributes().get("isInactive"));
 		var traceMessage = String.format(
 			"%s: %s user '%s'",

@@ -38,7 +38,6 @@ export async function getPromoMessage() {
   var retries = 0
   while(retries < 100) {
     const resp = await fetch(`${url}/promo`)
-    //console.log("*** " + resp.status)
     if (resp.status == 200) return resp.json()
     else if (resp.status == 204) retries++
     else throw new Error("Unexpected response " + resp.status)

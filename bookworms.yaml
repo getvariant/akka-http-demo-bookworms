@@ -13,8 +13,8 @@ states:
 
 variations:
 
-  # Testing offers of free shipping to low-engagement customers with multiple
-  # minimal order thresholds.
+  # Testing offers of free shipping to low-engagement customers with multiple minimal
+  # order thresholds. The qualification hook will only qualify unengaged users.
   - name: FreeShippingExp
     experiences:
       - name: Nada
@@ -34,14 +34,12 @@ variations:
     hooks:
       - class: com.variant.demo.bookworms.spi.FreeShippingExpQualificationHook
 
-  # Feature Flag gating access to the reputation feature on the book detail
-  # and the checkout pages. ReputationQualificationHook will only allow user
+  # Feature Flag gating access to the reputation feature on the book details
+  # and the checkout pages. The qualification hook will only allow user
   # "WithReputation" into the feature.
   - name: ReputationFF
-    concurrentVariations: [FreeShippingExp]
     experiences:
       - name: WithReputation
-        isControl: true
     onStates:
       - state: BookDetails
       - state: Checkout
