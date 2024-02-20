@@ -18,9 +18,10 @@ object Promo extends Endpoint {
         Option(exp.getParameters.get("threshold")) match {
           case Some(threshold) =>
             // We have the session and a non-control experience. Still have to check
-            // the user's status, in case the user just purchased and is reloading.
-            // In this case the qualifier may not have had a chance to run yet.
-            // This is a hack and should be dealt by targeting from JavaScript.
+            // the user's status, in case the user just bought and is reloading the
+            // home page. In this case the qualifier may not have had a chance to run yet.
+            // This is a hack; the proper solution to concurrent server calls on the same
+            // state is to target from JavaScript first before loading the rest.
             if (UserRegistry.isInactive) s"Free shipping on orders over $$${threshold}"
             else ""
           case None =>
