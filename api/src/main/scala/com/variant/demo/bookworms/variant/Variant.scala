@@ -57,8 +57,7 @@ object Variant extends LazyLogging {
       }
       yield {
         ssn.getAttributes.put("isInactive", UserRegistry.isInactive.toString)
-        val foo = ssn.targetForState(myState)
-        foo
+        ssn.targetForState(myState)
       }
     } catch {
       case _: ServerConnectException => None

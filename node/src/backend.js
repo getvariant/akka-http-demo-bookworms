@@ -34,7 +34,9 @@ export function setUser(name) {
   return fetch(`${url}/user/${name}`, {"method": "PUT"});
 }
 
+
 export async function getPromoMessage() {
+console.log(window.location.pathname)
   var retries = 0
   while(retries < 100) {
     const resp = await fetch(`${url}/promo`)

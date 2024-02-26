@@ -12,11 +12,6 @@ export function UserSelector() {
        window.location.reload()
     }
 
-    function onUserRelogin() {
-        destroyVariantSession()
-        window.location.reload()
-    }
-
     // Close current variant session by deleting the session id cookie.
     function destroyVariantSession() {
         document.cookie = "variant-ssnid=;host=loclhost;path=/;expires=" + new Date(0).toUTCString()
@@ -42,7 +37,6 @@ export function UserSelector() {
               <option value="NoReputation">NoReputation</option>
               <option value="WithReputation">WithReputation</option>
             </select>
-            <a href="#" onClick={e => onUserRelogin()}>Re-login</a>
             </label>
         );
     } else {
