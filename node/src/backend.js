@@ -4,18 +4,25 @@ const url = ""
 export function getBooks() {
   return fetch(`${url}/books`)
     .then(resp => {
-      getPromoMessage();
+      getPromoMessage()
       return resp.json()
-      }
-    );
+    })
 }
 
 export function getBookDetails(bookId) {
-  return fetch(`${url}/books/${bookId}`).then(resp => resp.json());
+  return fetch(`${url}/books/${bookId}`)
+    .then(resp => {
+      getPromoMessage()
+      return resp.json()
+    })
 }
 
 export function putCopyHold(copyId) {
-  return fetch(`${url}/copies/${copyId}`, {"method": "PUT"}).then(resp => resp.json());
+  return fetch(`${url}/copies/${copyId}`, {"method": "PUT"})
+    .then(resp => {
+      getPromoMessage()
+      return resp.json()
+    })
 }
 
 /** Emulate purchase by making the copy unavailable. It will no longer be shown */
@@ -42,7 +49,6 @@ export function setUser(name) {
 async function getPromoMessage() {
     const resp = await fetch(`${url}/promo`)
     const message = await resp.json()
-    console.log(message)
     const promoDiv = document.getElementById('promo')
     if (message.length > 0) {
       promoDiv.innerHTML = message
