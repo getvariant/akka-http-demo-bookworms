@@ -9,7 +9,8 @@ import {UserSelector} from "./footer"
 function Router() {
     return (
         <div>
-            <PromoMessage />
+            <div style={{display: 'none'}} id={'promo'}></div>
+
             <Routes>
                 <Route path="/" element={<Books />} />
                 <Route path="books/:id" element={<BookDetails />} />

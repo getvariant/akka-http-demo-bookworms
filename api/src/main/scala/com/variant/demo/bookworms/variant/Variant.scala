@@ -1,6 +1,7 @@
 package com.variant.demo.bookworms.variant
 
 import akka.http.scaladsl.model.HttpResponse
+import akka.http.scaladsl.model.headers.Referer
 import akka.http.scaladsl.server.RequestContext
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
@@ -46,14 +47,32 @@ object Variant extends LazyLogging {
     connection().flatMap(_.getSession(ctx.request).toScala)
   }
 
-  def targetForState(name: String)(implicit ctx: RequestContext): Option[StateRequest] = {
+  /** Infer the Variant state from the referring page. */
+  private def variantState(implicit ctx: RequestContext): String = {
+    // Mapping from referer page prefix to Variant state name
+    val refererMapping = List(
+      "/books/" -> "BookDetails",
+      "/checkout/" -> "Checkout",
+      "/" -> "Home",
+    )
+    Referer.parseFromValueString(ctx.request.getHeader("Referer").get().value()) match {
+      case Right(refererHeader) =>
+        val refererUri = refererHeader.uri.path.toString
+          refererMapping.find(e => refererUri.startsWith(e._1)).map(_._2)
+            .getOrElse(throw new Exception(s"Unable to map referer uri $refererUri"))
+      case Left(_) => throw new Exception("No Referer Header")
+    }
+  }
+  def targetForState()(implicit ctx: RequestContext): Option[StateRequest] = {
     import scala.jdk.OptionConverters._
     try {
       for {
         ssn <- connection().map(
-          conn =>
-            conn.getOrCreateSession(ctx.request, Optional.of(UserRegistry.currentUser)))
-        myState <- ssn.getSchema.getState(name).toScala
+          conn => this.synchronized {
+            conn.getOrCreateSession(ctx.request, Optional.of(UserRegistry.currentUser))
+          }
+        )
+        myState <- ssn.getSchema.getState(variantState).toScala
       }
       yield {
         ssn.getAttributes.put("isInactive", UserRegistry.isInactive.toString)

@@ -2,8 +2,12 @@
 const url = ""
 
 export function getBooks() {
-  return fetch(
-    `${url}/books`).then(resp => resp.json());
+  return fetch(`${url}/books`)
+    .then(resp => {
+      getPromoMessage();
+      return resp.json()
+      }
+    );
 }
 
 export function getBookDetails(bookId) {
@@ -35,16 +39,15 @@ export function setUser(name) {
 }
 
 
-export async function getPromoMessage() {
-console.log(window.location.pathname)
-  var retries = 0
-  while(retries < 100) {
+async function getPromoMessage() {
     const resp = await fetch(`${url}/promo`)
-    if (resp.status == 200) return resp.json()
-    else if (resp.status == 204) retries++
-    else throw new Error("Unexpected response " + resp.status)
-  }
-  // If after this many retries we haven't gotten an OK response,
-  // we're assuming to have been disqualified.
-  return ""
+    const text = await resp.text()
+    console.log(text)
+    const promoDiv = document.getElementById('promo')
+    if (text.length > 0) {
+      promoDiv.innerHTML = text
+      promoDiv.style.display = "block"
+    } else {
+      promoDiv.style.display = "none"
+    }
 }

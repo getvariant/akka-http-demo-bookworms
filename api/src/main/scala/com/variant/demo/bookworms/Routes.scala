@@ -1,14 +1,13 @@
 package com.variant.demo.bookworms
 
-import akka.http.scaladsl.model.headers.Referer
-import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.{RequestContext, Route, RouteResult}
 import com.typesafe.scalalogging.LazyLogging
 import com.variant.demo.bookworms.api.{Books, Copies, Promo, Root, Users}
 import com.variant.demo.bookworms.variant.Variant._
-import org.apache.http.HttpHeaders
 
+import scala.jdk.OptionConverters._
 import scala.concurrent.{ExecutionContext, Future}
 
 class Routes(implicit ec: ExecutionContext) extends LazyLogging {
@@ -27,7 +26,7 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
       pathEnd {
         get {
           implicit ctx => action {
-            targetForState("Home") match {
+            targetForState() match {
               case Some(stateRequest) =>
                 // All went well and we have a state request
                 Books.get.transform(commitOrFail(stateRequest))
@@ -42,7 +41,7 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
       path(Segment) { bookId =>
         get {
           implicit ctx => action {
-            targetForState("BookDetails") match {
+            targetForState() match {
               case Some(stateRequest) =>
                 // All went well and we have a state request
                 val withReputation = isExperienceLive(stateRequest,"ReputationFF","WithReputation")
@@ -77,7 +76,7 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
           put {
             // Put hold on a book copy.
             implicit ctx => action {
-              targetForState("Checkout") match {
+              targetForState() match {
                 case Some(stateRequest) =>
                   // All went well and we have a state request.
                   val withReputation = isExperienceLive(stateRequest, "ReputationFF", "WithReputation")
@@ -116,12 +115,24 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
         // Current promo message, if any
         get {
           implicit ctx => action {
-            Referer.parseFromValueString(ctx.request.getHeader("Referer").get().value()) match {
-              case Left(_) => throw new Exception("Unable to determine referring page")
-              case Right(referer) =>
-                println(referer.uri.path)
-            }
-            Promo.getPromoMessage
+            val message: String = (for {
+              stateRequest <- targetForState()
+              liveExperience <- stateRequest.getLiveExperience("FreeShippingExp").toScala
+            } yield {
+              // We have live experience in the right experiment.
+              Option(liveExperience.getParameters.get("threshold")) match {
+                case Some(threshold) => s"Free shipping on orders over $$${threshold}"
+                case None => ""
+              }
+
+            })
+              .getOrElse("")
+
+            val resp =   HttpResponse(
+              StatusCodes.OK,
+              entity = HttpEntity(ContentTypes.`text/plain(UTF-8)`, message)
+            )
+            Future.successful(resp)
           }
         }
       }

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getPromoMessage } from "./backend.js";
 
 export function PromoMessage() {
-
+/*
     const [promoMessage, setPromoMessage] = useState(null);
     useEffect(() => {
       const fetchData = async () => {
@@ -21,4 +21,5 @@ export function PromoMessage() {
     } else {
         return null;
     }
+    */
 }
