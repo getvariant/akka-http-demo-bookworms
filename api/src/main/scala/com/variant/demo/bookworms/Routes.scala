@@ -115,24 +115,7 @@ class Routes(implicit ec: ExecutionContext) extends LazyLogging {
         // Current promo message, if any
         get {
           implicit ctx => action {
-            val message: String = (for {
-              stateRequest <- targetForState()
-              liveExperience <- stateRequest.getLiveExperience("FreeShippingExp").toScala
-            } yield {
-              // We have live experience in the right experiment.
-              Option(liveExperience.getParameters.get("threshold")) match {
-                case Some(threshold) => s"Free shipping on orders over $$${threshold}"
-                case None => ""
-              }
-
-            })
-              .getOrElse("")
-
-            val resp =   HttpResponse(
-              StatusCodes.OK,
-              entity = HttpEntity(ContentTypes.`text/plain(UTF-8)`, message)
-            )
-            Future.successful(resp)
+            Promo.getPromoMessage
           }
         }
       }

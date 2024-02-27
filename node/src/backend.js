@@ -41,11 +41,11 @@ export function setUser(name) {
 
 async function getPromoMessage() {
     const resp = await fetch(`${url}/promo`)
-    const text = await resp.text()
-    console.log(text)
+    const message = await resp.json()
+    console.log(message)
     const promoDiv = document.getElementById('promo')
-    if (text.length > 0) {
-      promoDiv.innerHTML = text
+    if (message.length > 0) {
+      promoDiv.innerHTML = message
       promoDiv.style.display = "block"
     } else {
       promoDiv.style.display = "none"
