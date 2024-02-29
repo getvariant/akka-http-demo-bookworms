@@ -1,24 +1,23 @@
 # Bookworms Demo Application 
-This application serves a dual purpose. It demonstrates 1) a basic web application built with Scala
-and React.JS; and 2) instrumentation of an A/B test and a feature flag with 
-[Variant CVM](https://getvariant.dev).
+#### Version 1.2
 
-### Table of Contents
+Demonstrates instrumentation of an A/B test and a feature flag with 
+[Variant CVM Server](https://getvariant.com). 
 
-### 1. Downloading and Running
+### 1. Downloading and Configuring
 
 #### Clone this repository 
 ```shell
-$ git clone git@github.com:getvariant/variant-demo-scala-akka.git
+% git clone git@github.com:getvariant/variant-demo-jvm-bookworms.git
 ```
 
 #### Create the Postgres Database
-##### Postgres Docker container
+
 Assuming you have docker installed (e.g. Docker Desktop for MacOS),
 ```shell
-$ cd src/db
-$ ./postgres-up.sh
-$ ./schema.sh
+% cd src/db
+% ./postgres-up.sh
+% ./schema.sh
 ```
 This will:
 * Deploy Postgres 13 in a Docker container with the root user `postgres` listening on port `5432`;
@@ -34,7 +33,7 @@ easy to adopt `postgres-up.sh` and `schema.sh` for the local case.
 
 #### Run Unit Tests on API Server (Optional)
 ```shell
-$ mvn test
+% mvn test
 ```
 
 #### Build and Deploy the SPI Extensions
@@ -45,11 +44,11 @@ copied locally to `variant/lib`.
 
 Optionally, run Unit Tests on API Server (no test ATTOTW).
 ```shell
-$ mvn test
+% mvn test
 ```
 Build SPI extensions
 ```shell
-$ mvn package
+% mvn package
 ```
 This will generate the server-side extensions used by this project locally
 in `target/variant-demo-jdk-bookworjs-spi-*.jar`. Deploy it to the server:
@@ -68,7 +67,7 @@ cp bookworms.yaml <variant-server-dir>/schemata
 ```
 Start Variant Server
 ```shell
-$ <variant-server-dir>/bin/variant start
+% <variant-server-dir>/bin/variant start
 ```
 The server should come up and give you the following output:
 ```text
@@ -79,20 +78,20 @@ The server should come up and give you the following output:
 ```
 #### Run Bookworms API Server
 ```shell
-$ cd api
-$ sbt run
+% cd api
+% sbt run
 ```
 This will start the Bookworms API server on `localhost:8080`.
 
 #### Run Node Frontend
 ```shell
-$ cd node
-$ npm install
+% cd node
+% npm install
 ```
 This will download required Node modules. You should only have to do it once on a newly cloned
 repository. To start Node:
 ```shell
-$ npm start
+% npm start
 ```
 Point your browser `localhost:3000`.
 

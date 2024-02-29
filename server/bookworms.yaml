@@ -1,0 +1,55 @@
+#
+# Variant CVM.
+# Variation schema for the Bookworms demo application.
+#
+name: bookworms
+description: Variant experiment schema for the Bookworms demo application
+flusher:
+  class: com.variant.spi.stdlib.flush.TraceEventFlusherCsv
+
+states:
+  - name: Home
+    parameters:
+        path: /
+  - name: BookDetails
+    parameters:
+      path: /books/\d+
+  - name: Checkout
+    parameters:
+      path: /checkout/\d+
+
+variations:
+
+  # Testing offers of free shipping to inactive customers with multiple minimal
+  # order thresholds.
+  - name: FreeShippingExp
+    experiences:
+      - name: Nada
+        isControl: true
+      - name: On50
+        parameters:
+          threshold: 50
+      - name: On100
+        parameters:
+          threshold: 100
+    onStates:
+      - state: Home
+      - state: BookDetails
+      - state: Checkout
+    durability:
+      qualification: state
+    hooks:
+      # Only qualify unengaged users.
+      - class: com.variant.demo.bookworms.spi.FreeShippingExpQualificationHook
+
+  # Feature Flag gating access to the reputation feature on the book details
+  # and the checkout pages. The qualification hook will only allow user
+  # "WithReputation" into the feature.
+  - name: ReputationFF
+    experiences:
+      - name: WithReputation
+    onStates:
+      - state: BookDetails
+      - state: Checkout
+    hooks:
+      - class: com.variant.demo.bookworms.spi.ReputationFFQualificationHook
