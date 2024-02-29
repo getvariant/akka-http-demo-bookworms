@@ -9,8 +9,14 @@ flusher:
 
 states:
   - name: Home
+    parameters:
+        path: /
   - name: BookDetails
+    parameters:
+      path: /books/\d+
   - name: Checkout
+    parameters:
+      path: /checkout/\d+
 
 variations:
 

@@ -5,12 +5,14 @@ import akka.http.scaladsl.model.headers.Referer
 import akka.http.scaladsl.server.RequestContext
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
+import com.variant.share.schema.State
 import com.variant.client.{Connection, ServerConnectException, StateRequest, VariantClient, Session}
 import com.variant.demo.bookworms.UserRegistry
 
 import java.util.Optional
 import scala.util.{Failure, Success, Try}
 import scala.jdk.OptionConverters._
+import scala.jdk.CollectionConverters._
 
 /**
  * A few general purpose helper functions.
@@ -24,6 +26,7 @@ object Variant extends LazyLogging {
   }
   private var _connection: Option[Connection] = None
 
+  // The connection to Variant server.
   private def connection(): Option[Connection] = {
     if (_connection.isEmpty) _connection =
       try {
@@ -43,36 +46,30 @@ object Variant extends LazyLogging {
     _connection
   }
 
+  /** Get existing session tracked by the session ID cookie */
   def thisVariantSession(implicit ctx: RequestContext): Option[Session] = {
     connection().flatMap(_.getSession(ctx.request).toScala)
   }
 
   /** Infer the Variant state from the referring page. */
-  private def variantState(implicit ctx: RequestContext): String = {
-    // Mapping from referer page prefix to Variant state name
-    val refererMapping = List(
-      "/books/" -> "BookDetails",
-      "/checkout/" -> "Checkout",
-      "/" -> "Home",
-    )
-    Referer.parseFromValueString(ctx.request.getHeader("Referer").get().value()) match {
-      case Right(refererHeader) =>
-        val refererUri = refererHeader.uri.path.toString
-          refererMapping.find(e => refererUri.startsWith(e._1)).map(_._2)
-            .getOrElse(throw new Exception(s"Unable to map referer uri $refererUri"))
+  private def inferState(ssn: Session)(implicit ctx: RequestContext): Option[State] = {
+    val refererUri: String = Referer.parseFromValueString(ctx.request.getHeader("Referer").get().value()) match {
+      case Right(refererHeader) => refererHeader.uri.path.toString
       case Left(_) => throw new Exception("No Referer Header")
     }
+    ssn.getSchema.getStates.asScala.find(state => refererUri.matches(state.getParameters.get("path")))
   }
   def targetForState()(implicit ctx: RequestContext): Option[StateRequest] = {
-    import scala.jdk.OptionConverters._
     try {
       for {
         ssn <- connection().map(
+          // Avoid concurrent state creation if does not exist. This is only an issue on the very first page,
+          // where we don't yet have a variant session.
           conn => this.synchronized {
             conn.getOrCreateSession(ctx.request, Optional.of(UserRegistry.currentUser))
           }
         )
-        myState <- ssn.getSchema.getState(variantState).toScala
+        myState <- inferState(ssn)
       }
       yield {
         ssn.getAttributes.put("isInactive", UserRegistry.isInactive.toString)
