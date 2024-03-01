@@ -179,4 +179,4 @@ durability: decisions are re-evaluated on every state request.
 Concurrently with the free shipping experiment we also demo the reputation feature flag `ReputationFF`.
 It's instrumented on the `Book Details` and the  `Checkout` pages and gates early access to the feature
 still under development, which displays the seller's reputation. The traffic is opted into the feature
-by the [`ReputationFFQualificationHook`](file://spi/src/main/java/com/variant/demo/bookworms/spi/ReputationFFQualificationHook.java) qualification hook
+by the [`ReputationFFQualificationHook`](spi/src/main/java/com/variant/demo/bookworms/spi/ReputationFFQualificationHook.java) qualification hook
