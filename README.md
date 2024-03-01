@@ -178,7 +178,10 @@ durability: decisions are re-evaluated on every state request.
 #### 2.3 The Reputation Feature Flag
 Concurrently with the free shipping experiment we also demo the reputation feature flag `ReputationFF`.
 It's instrumented on the `Book Details` and the  `Checkout` pages and gates early access to the feature
-still under development, which displays the seller's reputation. The traffic is opted into the feature
+still under development, which displays the seller's reputation:
+![image](img/home-reputation.png)
+
+The traffic is opted into the feature
 by the [`ReputationFFQualificationHook`](spi/src/main/java/com/variant/demo/bookworms/spi/ReputationFFQualificationHook.java) 
 qualification hook, which simply opts in the user `WithReputation` and disqualifies the user `NoReputation`.
 (In real life the qualification hook is likely to implement a much more complex logic.)
