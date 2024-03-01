@@ -56,6 +56,6 @@ lazy val root = (project in file("."))
       "org.scalatest" %% "scalatest" % "3.2.9" % Test
     ),
     // To debug, uncomment and connect with eclipse after the VM is suspended.
-    //javaOptions ++= Seq("-Xdebug",  "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005")
+    // javaOptions ++= Seq("-Xdebug",  "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005")
   )
 
