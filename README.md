@@ -130,7 +130,7 @@ The two code variations instrumented in this demo are defined in the variation s
 lead to more sales. The control experience `Nada` implements no offer, while the two treatments `On50`
 and `on100` implement the free shipping offer experience for minimum purchase of $50 and $100 respectively.
 The qualification logic of whether the user is inactive is implemented by the class 
-`FreeShippingExpQualificationHook` which can be found in the `spi` module. In real life this hook would
+[`FreeShippingExpQualificationHook`](spi/src/main/java/com/variant/demo/bookworms/spi/FreeShippingExpQualificationHook.java) which can be found in the `spi` module. In real life this hook would
 likely read the operational database for the up-to-date information about the user's most recent purchase,
 but we emulate the logic by examining the `isActive` session attribute set by the Bookworms API server.
 
@@ -179,4 +179,9 @@ durability: decisions are re-evaluated on every state request.
 Concurrently with the free shipping experiment we also demo the reputation feature flag `ReputationFF`.
 It's instrumented on the `Book Details` and the  `Checkout` pages and gates early access to the feature
 still under development, which displays the seller's reputation. The traffic is opted into the feature
-by the [`ReputationFFQualificationHook`](spi/src/main/java/com/variant/demo/bookworms/spi/ReputationFFQualificationHook.java) qualification hook
+by the [`ReputationFFQualificationHook`](spi/src/main/java/com/variant/demo/bookworms/spi/ReputationFFQualificationHook.java) 
+qualification hook, which simply opts in the user `WithReputation` and disqualifies the user `NoReputation`.
+(In real life the qualification hook is likely to implement a much more complex logic.)
+
+Naturally, the `ReputationFF` flag only has one experience, reflecting the fact that the other experience is
+`nil`.
