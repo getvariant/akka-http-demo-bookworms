@@ -10,6 +10,8 @@ __A fully fledged copy of Variant Code Variation Management Server is included w
 allowed to continue using it in development, but not in production. If you wish to try Variant in production,
 you must obtain a production license.__
 
+Complete Docs at https://getvariant.com
+
 ### 1. Downloading and Configuring
 
 #### Clone this repository 
