@@ -39,14 +39,13 @@ lazy val root = (project in file("."))
       "io.circe" %% "circe-generic" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
 
-      // Variant client
-      "com.variant" % "variant-java-client" % variantVersion,
-      // TODO: Figure out why sbt does not download Fasterxml jars even though they are
-      //       listed as dependencies by Java Client
+      // Variant SDK
+      // We must list transitive dependencies because for now
+      // Variant client JAR is included as unmanaged dependency.
+      "org.apache.httpcomponents" % "httpclient" % "4.5.1",
       "com.fasterxml.jackson.core" % "jackson-core" % "2.13.4",
       "com.fasterxml.jackson.core" % "jackson-databind" % "2.13.4",
       "com.fasterxml.jackson.core" % "jackson-annotations" % "2.13.4",
-
       // TODO: Ditto for SnakeYaml
       "org.yaml" % "snakeyaml" % "2.0",
 
