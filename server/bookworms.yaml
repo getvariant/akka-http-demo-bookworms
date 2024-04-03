@@ -1,6 +1,7 @@
 #
 # Variant CVM.
 # Variation schema for the Bookworms demo application.
+# Copyright Variant 2024.
 #
 name: bookworms
 description: Variant experiment schema for the Bookworms demo application
