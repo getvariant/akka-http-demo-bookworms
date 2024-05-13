@@ -26,18 +26,20 @@ Java SDK to communicate with Variant server. (Scala is a JVM language fully capa
 * `spi` Java sources for the server-side extensions used by this demo.
 
 #### Deploy Variant CVM Server
-* Unzip variant server
+* Copy the Variant server distribution Zip archive to a directory of your choice outside this
+repository, e.g. `/tmp`, and inzip.
 ```shell
-cd server
+cp server/variant-server-<release>.zip /tmp
+cd /tmp
 unzip variant-server-<release>.zip
 ```
-This will create the complete server directory structure in `variant-server-<release>`
+This will create the complete server directory structure in `/tmp/variant-server-<release>`
 
 * Copy the Variant schema file `bookworms.yaml` to the server's `schemata` directory:
 ```shell
-cp bookworms.yaml variant-server-<release>/schemata
+cp server/bookworms.yaml /tmp/variant-server-<release>/schemata
 ```
-* Edit the default Variant config file `variant-server-<release>/conf/variant.conf`. Uncomment
+* Edit the Variant config file `/tmp/variant-server-<release>/conf/variant.conf`. Uncomment
 and change the value of the parameter `event.writer.max.delay` which forces the flushing of the event
 buffers to disk:
 ```text
@@ -50,12 +52,12 @@ at most one second.
 ```shell
 cd spi
 mvn clean package
-cp target/bookworms-spi-<release>.jar ../server/variant-server-<release>/spi
+cp target/bookworms-spi-<release>.jar /tmp/variant-server-<release>/spi
 ```
 
 * Start Variant server:
 ```shell
-server/variant-server-<release>/bin/variant start
+/tmp/variant-server-<release>/bin/variant start
 ```
 This will start Variant server in the foreground and you should see the following output:
 ```text
@@ -63,11 +65,11 @@ This will start Variant server in the foreground and you should see the followin
 2024-02-29 13:40:11,280 INFO - c.v.s.schema.ServerFlusherService - [431] Initialized flusher [TraceEventFlusherCsv] for schema [bookworms]
 2024-02-29 13:40:11,303 INFO - c.v.s.schema.Schemata - [422] Deployed schema [bookworms] from file [bookworms.yaml]
 ...
-2024-02-29 13:40:11,314 INFO - c.v.s.impl.VariantServerImpl - [410] Variant CVM Server release 1.2.0 started on port [5377] in 1.257s
+2024-02-29 13:40:11,314 INFO - c.v.s.impl.VariantServerImpl - [410] Variant CVM Server release 1.3.0 started on port [5377] in 1.257s
 ```
 
 Note that the Bookworms variation schema uses the trace event flusher that writes trace events into the local
-comma-separated values (CSV) file `server/variant-server-<release>/log/trace-events.csv`
+comma-separated values (CSV) file `/tmp/variant-server-<release>/log/trace-events.csv`
 
 #### Create the Postgres Database
 Assuming you have Docker installed (e.g. Docker Desktop for MacOS),
