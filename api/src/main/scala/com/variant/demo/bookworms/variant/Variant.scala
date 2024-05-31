@@ -72,7 +72,7 @@ object Variant extends LazyLogging {
         myState <- inferState(ssn)
       }
       yield {
-        ssn.getAttributes.put("isInactive", UserRegistry.isInactive.toString)
+        ssn.setAttribute("isInactive", UserRegistry.isInactive.toString)
         ssn.targetForState(myState)
       }
     } catch {

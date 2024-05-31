@@ -1,8 +1,8 @@
 package com.variant.demo.bookworms.spi;
 
 import com.variant.server.spi.TraceEvent;
-import com.variant.server.spi.lifecycle.VariationQualificationLifecycleEvent;
-import com.variant.server.spi.lifecycle.VariationQualificationLifecycleHook;
+import com.variant.server.spi.QualificationLifecycleEvent;
+import com.variant.server.spi.QualificationLifecycleHook;
 
 import java.util.Optional;
 
@@ -11,9 +11,9 @@ import java.util.Optional;
  * Bookworms demo application.
  */
 
-public class ReputationFFQualificationHook implements VariationQualificationLifecycleHook {
+public class ReputationFFQualificationHook implements QualificationLifecycleHook {
 	@Override
-	public Optional<Boolean> post(VariationQualificationLifecycleEvent event) {
+	public Optional<Boolean> post(QualificationLifecycleEvent event) {
 		var qualified = "WithReputation".equals(event.getSession().getOwnerId().get());
 		var traceMessage = String.format(
 			"%s: %s user '%s'",

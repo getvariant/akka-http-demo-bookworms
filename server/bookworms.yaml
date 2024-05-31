@@ -29,10 +29,10 @@ variations:
         isControl: true
       - name: On50
         parameters:
-          threshold: 50
+          threshold: "50"
       - name: On100
         parameters:
-          threshold: 100
+          threshold: "100"
     onStates:
       - state: Home
       - state: BookDetails
