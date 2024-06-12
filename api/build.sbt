@@ -45,15 +45,7 @@ lazy val root = (project in file("."))
       "com.fasterxml.jackson.core" % "jackson-core" % "2.13.4",
       "com.fasterxml.jackson.core" % "jackson-databind" % "2.13.4",
       "com.fasterxml.jackson.core" % "jackson-annotations" % "2.13.4",
-      // TODO: Ditto for SnakeYaml
       "org.yaml" % "snakeyaml" % "2.0",
-
-      // Testing libs
-      "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test,
-      "com.typesafe.akka" %% "akka-actor-testkit-typed" % akkaVersion % Test,
-      "org.scalatest" %% "scalatest" % "3.2.9" % Test
-    ),
-    // To debug, uncomment and connect with eclipse after the VM is suspended.
-    // javaOptions ++= Seq("-Xdebug",  "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005")
+    )
   )
 
