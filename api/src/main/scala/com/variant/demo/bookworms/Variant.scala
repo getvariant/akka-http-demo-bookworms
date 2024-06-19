@@ -1,21 +1,21 @@
-package com.variant.demo.bookworms.variant
+package com.variant.demo.bookworms
 
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.model.headers.Referer
 import akka.http.scaladsl.server.RequestContext
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
+import com.variant.client.stdlib.SessionIdTrackerAkka
+import com.variant.client._
 import com.variant.share.schema.State
-import com.variant.client.{Connection, ServerConnectException, StateRequest, VariantClient, Session}
-import com.variant.demo.bookworms.UserRegistry
 
 import java.util.Optional
-import scala.util.{Failure, Success, Try}
-import scala.jdk.OptionConverters._
 import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
+import scala.util.{Failure, Success, Try}
 
 /**
- * A few general purpose helper functions.
+ * General purpose helper functions.
  */
 object Variant extends LazyLogging {
 
@@ -59,6 +59,8 @@ object Variant extends LazyLogging {
     }
     ssn.getSchema.getStates.asScala.find(state => refererUri.matches(state.getParameters.get("path")))
   }
+
+  /** Target current session for a given state */
   def targetForState()(implicit ctx: RequestContext): Option[StateRequest] = {
     try {
       for {
@@ -80,6 +82,7 @@ object Variant extends LazyLogging {
     }
   }
 
+  /** Is a given experience live in a given state request */
   def isExperienceLive(stateRequest: StateRequest, variationName: String, experienceName: String): Boolean = {
     stateRequest.getLiveExperience(variationName).stream().anyMatch(exp => exp.getName == experienceName)
   }

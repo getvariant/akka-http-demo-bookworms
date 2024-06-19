@@ -5,7 +5,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.{RequestContext, Route, RouteResult}
 import com.typesafe.scalalogging.LazyLogging
 import com.variant.demo.bookworms.api.{Books, Copies, Promo, Root, Users}
-import com.variant.demo.bookworms.variant.Variant._
+import Variant._
 
 import scala.jdk.OptionConverters._
 import scala.concurrent.{ExecutionContext, Future}

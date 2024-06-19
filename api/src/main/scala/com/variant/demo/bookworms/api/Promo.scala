@@ -3,7 +3,7 @@ package com.variant.demo.bookworms.api
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.server.RequestContext
 import com.variant.demo.bookworms.UserRegistry
-import com.variant.demo.bookworms.variant.Variant._
+import com.variant.demo.bookworms.Variant._
 
 import scala.concurrent.Future
 import scala.jdk.OptionConverters._
