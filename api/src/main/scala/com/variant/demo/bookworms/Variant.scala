@@ -89,9 +89,8 @@ object Variant extends LazyLogging {
 
   def commitOrFail(req: StateRequest): Try[HttpResponse] => Try[HttpResponse] = {
     case Success(goodHttpResponse) =>
-      val wrapper = Array(goodHttpResponse)
-      req.commit(wrapper)
-      Try(wrapper(0))
+      val newHttpResp = req.commit(goodHttpResponse).asInstanceOf[HttpResponse]
+      Try(newHttpResp)
     case Failure(ex) =>
       req.fail()
       Failure(ex)
