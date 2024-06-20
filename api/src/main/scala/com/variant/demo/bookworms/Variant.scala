@@ -87,10 +87,10 @@ object Variant extends LazyLogging {
     stateRequest.getLiveExperience(variationName).stream().anyMatch(exp => exp.getName == experienceName)
   }
 
+  /** Partial function to commit or fail a given state request suitable for Future transforms */
   def commitOrFail(req: StateRequest): Try[HttpResponse] => Try[HttpResponse] = {
-    case Success(goodHttpResponse) =>
-      val newHttpResp = req.commit(goodHttpResponse).asInstanceOf[HttpResponse]
-      Try(newHttpResp)
+    case Success(httpResponse) =>
+      Success(req.commit(httpResponse).asInstanceOf[HttpResponse])
     case Failure(ex) =>
       req.fail()
       Failure(ex)
