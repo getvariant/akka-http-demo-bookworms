@@ -2,8 +2,7 @@ package com.variant.demo.bookworms.api
 
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.server.RequestContext
-import com.variant.demo.bookworms.UserRegistry
-import com.variant.demo.bookworms.variant.Variant._
+import com.variant.demo.bookworms.Variant._
 
 import scala.concurrent.Future
 import scala.jdk.OptionConverters._
@@ -17,15 +16,10 @@ object Promo extends Endpoint {
       } yield {
         Option(exp.getParameters.get("threshold")) match {
           case Some(threshold) =>
-            // We have the session and a non-control experience. Still have to check
-            // the user's status, in case the user just bought and is reloading the
-            // home page. In this case the qualifier may not have had a chance to re-run yet.
-            // This is a hack; the proper solution to concurrent server calls on the same
-            // state is to target from JavaScript first before loading the rest.
-            /*if (UserRegistry.isInactive) */s"Free shipping on orders over $$${threshold}"
-            //else ""
+            // A variant
+            s"Free shipping on orders over $$${threshold}"
           case None =>
-            // Control Experience
+            // Control
             ""
         }
       }) match {

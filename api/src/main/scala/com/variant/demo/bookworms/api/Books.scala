@@ -21,5 +21,4 @@ object Books extends Endpoint {
         .map(respondOk(_))
     else
       Postgres.getBookDetails(bookId).map(respondOk(_))
-
 }
