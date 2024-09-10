@@ -19,7 +19,7 @@ states:
     parameters:
       path: /checkout/\d+
 
-variations:
+experiments:
 
   # Testing offers of free shipping to inactive customers with multiple minimal
   # order thresholds.
@@ -37,7 +37,7 @@ variations:
       - state: Home
       - state: BookDetails
       - state: Checkout
-    durability:
+    timeToLive:
       qualification: state
     hooks:
       # Only qualify unengaged users.

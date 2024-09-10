@@ -1,7 +1,7 @@
 lazy val akkaHttpVersion = "10.4.0"
 lazy val akkaVersion = "2.7.0"
 lazy val circeVersion = "0.14.3"
-lazy val variantVersion = "1.3.2"
+lazy val variantVersion = "1.4.0"
 
 // Run in a separate JVM, to make sure sbt waits until all threads have
 // finished before returning.
