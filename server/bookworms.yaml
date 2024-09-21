@@ -39,6 +39,7 @@ experiments:
       - state: Checkout
     timeToLive:
       qualification: state
+      targeting: session  # In real life should be `experiment`
     hooks:
       # Only qualify unengaged users.
       - class: com.variant.demo.bookworms.spi.FreeShippingExpQualificationHook
