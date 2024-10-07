@@ -79,4 +79,8 @@ public interface OwnerRepository extends Repository<Owner, Integer> {
 	@Transactional(readOnly = true)
 	Page<Owner> findAll(Pageable pageable);
 
+	@Query("SELECT owner FROM Owner owner")
+	@Transactional(readOnly = true)
+	List<Owner> findAll();
+
 }

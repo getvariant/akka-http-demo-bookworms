@@ -20,6 +20,8 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.samples.petclinic.variant.BaseController;
+import org.springframework.samples.petclinic.owner.OwnerRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,16 +35,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author Arjen Poutsma
  */
 @Controller
-class VetController {
+class VetController extends BaseController {
 
 	private final VetRepository vetRepository;
 
-	public VetController(VetRepository clinicService) {
+	public VetController(VetRepository clinicService, OwnerRepository owners) {
+		super(owners);
 		this.vetRepository = clinicService;
 	}
 
 	@GetMapping("/vets.html")
 	public String showVetList(@RequestParam(defaultValue = "1") int page, Model model) {
+
+		// HttpServletRequest request =
+		// ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+		// .getRequest();
+
+		before(model);
+
 		// Here we are returning an object of type 'Vets' rather than a collection of Vet
 		// objects so it is simpler for Object-Xml mapping
 		Vets vets = new Vets();
