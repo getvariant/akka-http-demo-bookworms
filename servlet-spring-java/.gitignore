@@ -1,0 +1,13 @@
+*.DS_Store
+*.class
+*.log
+*.idea/
+*.bsp/
+*/target/
+/akkahttp-scala/api/project/
+/akkahttp-scala/node/node_modules/
+/node/target/
+/node/package-lock.json
+/node/package.json
+/node/project/
+/server/variant-server-1.3.1/*

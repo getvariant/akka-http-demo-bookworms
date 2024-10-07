@@ -1,0 +1,21 @@
+<html>
+<body>
+
+    <div th:fragment="promo-msg" style="text-align: center;"
+         th:text="#{variant.promo}">
+        Promo Message
+    </div>
+
+    <div th:fragment="user-select" style="text-align: right;">
+        <span style="font-weight: 700; font-size: 18px;">Select user</span>
+        <select
+            onChange="fetch('/login/' + this.value, {method: 'POST'})">
+            <option th:each="user : ${users}"
+                    th:text="|${user.firstName} ${user.lastName}|"
+                    th:value="${user.id}"
+                    th:selected="${currentUser != null && user.id == currentUser.id}">
+        </select>
+    </div>
+
+</body>
+</html>
