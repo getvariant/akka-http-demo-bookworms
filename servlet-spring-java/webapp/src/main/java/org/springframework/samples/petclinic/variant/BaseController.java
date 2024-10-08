@@ -9,12 +9,23 @@ public abstract class BaseController {
 	protected BaseController(OwnerRepository owners) {
 		this.owners = owners;
 	}
+
+	/**
+	 * Runs before descendant controller actions
+	 */
 	protected void before(Model model) {
-		var list = owners.findAll();
-		VariantController.getUser().ifPresent(owner ->
+
+		// Login user dropdown
+		var users = owners.findAll().stream()
+			.map(OwnerWrapper::new)
+			.toList();
+		VariantController.getLoggedInUser().ifPresent(owner ->
 			model.addAttribute("currentUser", owner)
 		);
-		model.addAttribute("users", list);
+		model.addAttribute("users", users);
+
+		//
+		model.addAttribute("isRenderPromo", true);
 	}
 
 }

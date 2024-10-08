@@ -15,18 +15,11 @@
  */
 package org.springframework.samples.petclinic.variant;
 
-import jakarta.validation.Valid;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.samples.petclinic.owner.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDate;
-import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -41,15 +34,18 @@ class VariantController extends BaseController {
 		super(owners);
 	}
 
+	// Currently logged-in users
 	private static Optional<Owner> user = Optional.empty();
 
-	public static Optional<Owner> getUser() {
+	public static Optional<Owner> getLoggedInUser() {
 		return user;
 	}
 
+	/**
+	 * Login a user.
+	 */
 	@PostMapping("/login/{ownerId}")
-	public @ResponseBody String loginUser(@PathVariable("ownerId") int ownerId) {
-		System.out.println("************************* " + ownerId);
+	public @ResponseBody String loginUser(@PathVariable("ownerId") int ownerId, HttpServletResponse response) {
 		user = Optional.of(owners.findById(ownerId));
 		return "OK";
 	}

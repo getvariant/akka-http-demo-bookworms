@@ -1,4 +1,4 @@
-package com.variant.demo.bookworms.spi;
+package com.variant.demo.petclinic.spi;
 
 import com.variant.server.spi.TraceEvent;
 import com.variant.server.spi.QualificationLifecycleEvent;
@@ -11,10 +11,10 @@ import java.util.Optional;
  * Bookworms demo application.
  */
 
-public class ReputationFFQualificationHook implements QualificationLifecycleHook {
+public class FreeVaccineQualificationHook implements QualificationLifecycleHook {
 	@Override
 	public Optional<Boolean> post(QualificationLifecycleEvent event) {
-		var qualified = "WithReputation".equals(event.getSession().getOwnerId().get());
+		var qualified = Boolean.valueOf(event.getSession().getAttributes().get("isInactive"));
 		var traceMessage = String.format(
 			"%s: %s user '%s'",
 			getClass().getSimpleName(), qualified ? "Qualified" : "Disqualified", event.getSession().getOwnerId().orElse("?"));

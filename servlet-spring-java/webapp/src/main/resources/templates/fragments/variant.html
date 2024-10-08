@@ -1,7 +1,8 @@
 <html>
 <body>
 
-    <div th:fragment="promo-msg" style="text-align: center;"
+    <div th:fragment="promo-msg" style="text-align: center; background-color: mistyrose;"
+         th:if="${isRenderPromo}"
          th:text="#{variant.promo}">
         Promo Message
     </div>
@@ -11,9 +12,9 @@
         <select
             onChange="fetch('/login/' + this.value, {method: 'POST'})">
             <option th:each="user : ${users}"
-                    th:text="|${user.firstName} ${user.lastName}|"
-                    th:value="${user.id}"
-                    th:selected="${currentUser != null && user.id == currentUser.id}">
+                    th:text="|${user.owner.firstName} ${user.owner.lastName} (${user.dogOrCatCount})|"
+                    th:value="${user.owner.id}"
+                    th:selected="${currentUser != null && user.owner.id == currentUser.id}">
         </select>
     </div>
 
