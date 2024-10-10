@@ -17,8 +17,9 @@
     <packaging>jar</packaging>
 
     <groupId>com.variant</groupId>
-    <artifactId>bookworms-spi</artifactId>
+    <artifactId>variant-petclinic-spi</artifactId>
     <version>${variant.version}</version>
+
     <dependencies>
         
         <!--  Variant Server-side SPI.

@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.variant;
+package com.variant.demo.petclinic;
 
 import org.springframework.samples.petclinic.owner.OwnerRepository;
 import org.springframework.ui.Model;
@@ -15,6 +15,7 @@ public abstract class BaseController {
 	 */
 	protected void before(Model model) {
 
+
 		// Login user dropdown
 		var users = owners.findAll().stream()
 			.map(OwnerWrapper::new)
@@ -27,5 +28,6 @@ public abstract class BaseController {
 		//
 		model.addAttribute("isRenderPromo", true);
 	}
+
 
 }

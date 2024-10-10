@@ -1,22 +1,19 @@
 #
-# Variation schema for the Bookworms demo application.
+# Variation schema for the Petclinic demo application.
 # Copyright Variant 2024.
 #
-name: bookworms
-description: Variant experiment schema for the Bookworms demo application
+name: petclinic
+description: Variant experiment schema for the Petclinic demo application
 flusher:
   class: com.variant.spi.stdlib.flush.TraceEventFlusherCsv
 
 states:
   - name: Home
     parameters:
-        path: /
-  - name: BookDetails
+      path: /
+  - name: Vets
     parameters:
-      path: /books/\d+
-  - name: Checkout
-    parameters:
-      path: /checkout/\d+
+      path: /vets
 
 experiments:
 
@@ -24,33 +21,27 @@ experiments:
   # order thresholds.
   - name: FreeShippingExp
     experiences:
-      - name: Nada
+      - name: NoPromo
         isControl: true
-      - name: On50
-        parameters:
-          threshold: "50"
-      - name: On100
-        parameters:
-          threshold: "100"
+      - name: WithPromo
     onStates:
       - state: Home
-      - state: BookDetails
-      - state: Checkout
+      - state: Vets
     timeToLive:
       qualification: state
       targeting: session  # In real life should be `experiment`
     hooks:
-      # Only qualify unengaged users.
+      # Only qualify those owners who have dogs or cats.
       - class: com.variant.demo.bookworms.spi.FreeShippingExpQualificationHook
 
   # Feature Flag gating access to the reputation feature on the book details
   # and the checkout pages. The qualification hook will only allow user
   # "WithReputation" into the feature.
-  - name: ReputationFF
-    experiences:
-      - name: WithReputation
-    onStates:
-      - state: BookDetails
-      - state: Checkout
-    hooks:
-      - class: com.variant.demo.bookworms.spi.ReputationFFQualificationHook
+#  - name: ReputationFF
+#    experiences:
+#      - name: WithReputation
+#    onStates:
+#      - state: BookDetails
+#      - state: Checkout
+#    hooks:
+#      - class: com.variant.demo.bookworms.spi.ReputationFFQualificationHook

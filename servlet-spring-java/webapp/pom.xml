@@ -2,10 +2,6 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.springframework.samples</groupId>
-  <artifactId>spring-petclinic</artifactId>
-  <version>3.3.0-SNAPSHOT</version>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -35,10 +31,27 @@
     <maven-checkstyle.version>3.3.1</maven-checkstyle.version>
     <nohttp-checkstyle.version>0.0.11</nohttp-checkstyle.version>
     <spring-format.version>0.0.41</spring-format.version>
+    <variant.version>1.4.0</variant.version>
 
   </properties>
 
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.springframework.samples</groupId>
+  <artifactId>variant-petclinic</artifactId>
+  <version>${variant.version}</version>
+
+
   <dependencies>
+
+    <!--  Variant Client SDK. -->
+    <dependency>
+      <groupId>com.variant</groupId>
+      <artifactId>variant-java-client</artifactId>
+      <version>${variant.version}</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/variant-java-client-1.4.0.jar</systemPath>
+    </dependency>
+
     <!-- Spring and Spring Boot dependencies -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
