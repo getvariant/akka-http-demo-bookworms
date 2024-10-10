@@ -17,7 +17,10 @@ package org.springframework.samples.petclinic.owner;
 
 import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
+
+import com.variant.client.StateRequest;
+import org.springframework.samples.petclinic.variant.BaseController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -43,13 +46,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @author Michael Isvy
  */
 @Controller
-class OwnerController {
+class OwnerController extends BaseController {
 
 	private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm";
 
 	private final OwnerRepository owners;
 
 	public OwnerController(OwnerRepository clinicService) {
+		super(clinicService);
 		this.owners = clinicService;
 	}
 
@@ -83,13 +87,17 @@ class OwnerController {
 	}
 
 	@GetMapping("/owners/find")
-	public String initFindForm() {
+	public String initFindForm(Model model) {
+		after(before(model));
 		return "owners/findOwners";
 	}
 
 	@GetMapping("/owners")
 	public String processFindForm(@RequestParam(defaultValue = "1") int page, Owner owner, BindingResult result,
 			Model model) {
+
+		Optional<StateRequest> reqOpt = before(model);
+
 		// allow parameterless GET request for /owners to return all records
 		if (owner.getLastName() == null) {
 			owner.setLastName(""); // empty string signifies broadest possible search
@@ -100,16 +108,19 @@ class OwnerController {
 		if (ownersResults.isEmpty()) {
 			// no owners found
 			result.rejectValue("lastName", "notFound", "not found");
+			after(reqOpt);
 			return "owners/findOwners";
 		}
 
 		if (ownersResults.getTotalElements() == 1) {
 			// 1 owner found
 			owner = ownersResults.iterator().next();
+			after(reqOpt);
 			return "redirect:/owners/" + owner.getId();
 		}
 
 		// multiple owners found
+		after(reqOpt);
 		return addPaginationModel(page, model, ownersResults);
 	}
 
@@ -161,5 +172,4 @@ class OwnerController {
 		mav.addObject(owner);
 		return mav;
 	}
-
 }

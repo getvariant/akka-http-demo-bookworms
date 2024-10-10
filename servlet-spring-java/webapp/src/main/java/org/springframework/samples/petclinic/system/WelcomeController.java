@@ -16,14 +16,24 @@
 
 package org.springframework.samples.petclinic.system;
 
+import org.springframework.samples.petclinic.variant.BaseController;
+import org.springframework.samples.petclinic.owner.OwnerRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-class WelcomeController {
+class WelcomeController extends BaseController {
 
+	public WelcomeController(OwnerRepository owners) {
+		super(owners);
+	}
 	@GetMapping("/")
-	public String welcome() {
+	public String welcome(Model model) {
+		after(before(model));
 		return "welcome";
 	}
 

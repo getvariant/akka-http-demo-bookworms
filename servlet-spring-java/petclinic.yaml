@@ -13,26 +13,29 @@ states:
       path: /
   - name: Vets
     parameters:
-      path: /vets
+      path: /vets.html
+  - name: Owners
+    parameters:
+      path: "/owners|/owners/find"
 
 experiments:
 
-  # Testing offers of free shipping to inactive customers with multiple minimal
-  # order thresholds.
-  - name: FreeShippingExp
+  # Testing offers of free core vaccination to owners of cats or dogs.
+  - name: FreeVaccinationExp
     experiences:
       - name: NoPromo
         isControl: true
       - name: WithPromo
     onStates:
       - state: Home
+      - state: Owners
       - state: Vets
     timeToLive:
       qualification: state
       targeting: session  # In real life should be `experiment`
     hooks:
       # Only qualify those owners who have dogs or cats.
-      - class: com.variant.demo.bookworms.spi.FreeShippingExpQualificationHook
+      - class: com.variant.demo.petclinic.spi.FreeVaccineQualificationHook
 
   # Feature Flag gating access to the reputation feature on the book details
   # and the checkout pages. The qualification hook will only allow user

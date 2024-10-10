@@ -1,4 +1,4 @@
-package com.variant.demo.petclinic;
+package org.springframework.samples.petclinic.variant;
 
 import org.springframework.samples.petclinic.owner.Owner;
 

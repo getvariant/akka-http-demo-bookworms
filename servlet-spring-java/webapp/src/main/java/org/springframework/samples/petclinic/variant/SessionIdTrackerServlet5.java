@@ -1,4 +1,4 @@
-package com.variant.demo.petclinic;
+package org.springframework.samples.petclinic.variant;
 
  import com.variant.client.SessionIdTracker;
  import jakarta.servlet.http.Cookie;

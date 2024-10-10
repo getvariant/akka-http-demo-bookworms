@@ -13,7 +13,7 @@
         <variant.version>1.4.0</variant.version>
     </properties>
 
-    <name>Server-side extensions for the Bookworms demo applications</name>
+    <name>Server-side extensions for the Petclinic demo applications</name>
     <packaging>jar</packaging>
 
     <groupId>com.variant</groupId>

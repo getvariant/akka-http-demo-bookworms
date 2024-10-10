@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.variant.demo.petclinic;
+package org.springframework.samples.petclinic.variant;
 
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.samples.petclinic.owner.*;
+import org.springframework.samples.petclinic.owner.OwnerRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @author Juergen Hoeller
@@ -28,26 +27,20 @@ import java.util.Optional;
  * @author Arjen Poutsma
  */
 @Controller
-class VariantController extends BaseController {
+class VariantController {
 
 	public VariantController(OwnerRepository owners) {
-		super(owners);
-	}
-
-	// Currently logged-in users
-	private static Optional<Owner> user = Optional.empty();
-
-	public static Optional<Owner> getLoggedInUser() {
-		return user;
+		System.out.println("************************ constructed");
+		//super(owners);
 	}
 
 	/**
 	 * Login a user.
 	 */
 	@PostMapping("/login/{ownerId}")
-	public @ResponseBody String loginUser(@PathVariable("ownerId") int ownerId, HttpServletResponse response) {
-		user = Optional.of(owners.findById(ownerId));
+	public @ResponseBody String loginUser(@PathVariable("ownerId") int ownerId) {
+		//loggedInUser = owners.findById(ownerId);
+		System.out.println("***********************");
 		return "OK";
 	}
-
 }

@@ -4,6 +4,7 @@ import com.variant.server.spi.TraceEvent;
 import com.variant.server.spi.QualificationLifecycleEvent;
 import com.variant.server.spi.QualificationLifecycleHook;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -12,13 +13,13 @@ import java.util.Optional;
  */
 
 public class FreeVaccineQualificationHook implements QualificationLifecycleHook {
+	List<String> qualifiedUsers = List.of("Eduardo Rodriquez", "Jean Coleman", "Maria Escobito", "Carlos Estaban");
 	@Override
 	public Optional<Boolean> post(QualificationLifecycleEvent event) {
-		var qualified = Boolean.valueOf(event.getSession().getAttributes().get("isInactive"));
-		var traceMessage = String.format(
-			"%s: %s user '%s'",
-			getClass().getSimpleName(), qualified ? "Qualified" : "Disqualified", event.getSession().getOwnerId().orElse("?"));
-		event.getSession().triggerEvent(TraceEvent.of(traceMessage));
+		final Boolean qualified =
+			event.getSession().getOwnerId()
+				.map(user -> qualifiedUsers.contains(user))
+				.orElse(false);
 		return Optional.of(qualified);
 	}
 }
