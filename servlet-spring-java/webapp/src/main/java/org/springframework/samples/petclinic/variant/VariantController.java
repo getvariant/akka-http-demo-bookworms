@@ -15,6 +15,9 @@
  */
 package org.springframework.samples.petclinic.variant;
 
+import com.variant.client.SessionIdTracker;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.samples.petclinic.owner.OwnerRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,20 +30,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author Arjen Poutsma
  */
 @Controller
-class VariantController {
+class VariantController extends BaseController {
 
 	public VariantController(OwnerRepository owners) {
-		System.out.println("************************ constructed");
-		//super(owners);
+		super(owners);
 	}
 
 	/**
 	 * Login a user.
 	 */
 	@PostMapping("/login/{ownerId}")
-	public @ResponseBody String loginUser(@PathVariable("ownerId") int ownerId) {
-		//loggedInUser = owners.findById(ownerId);
-		System.out.println("***********************");
+	public @ResponseBody String loginUser(@PathVariable("ownerId") int ownerId, HttpServletResponse response) {
+		loggedInUser = owners.findById(ownerId);
+		Cookie ssnIdTracker = new Cookie("variant-ssnid","");
+		ssnIdTracker.setPath("/");
+		ssnIdTracker.setMaxAge(0);
+		response.addCookie(ssnIdTracker);
 		return "OK";
 	}
 }

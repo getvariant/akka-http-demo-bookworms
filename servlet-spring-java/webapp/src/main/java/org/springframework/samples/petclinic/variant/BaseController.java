@@ -14,8 +14,7 @@ import java.util.Optional;
 public abstract class BaseController {
 
 	protected final OwnerRepository owners;
-
-	protected Owner loggedInUser;
+	protected static Owner loggedInUser;
 
 	protected BaseController(OwnerRepository owners) {
 		this.owners = owners;

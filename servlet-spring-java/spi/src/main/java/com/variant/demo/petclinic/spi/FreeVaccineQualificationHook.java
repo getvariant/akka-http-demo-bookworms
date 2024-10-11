@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 
 public class FreeVaccineQualificationHook implements QualificationLifecycleHook {
-	List<String> qualifiedUsers = List.of("Eduardo Rodriquez", "Jean Coleman", "Maria Escobito", "Carlos Estaban");
+	List<String> qualifiedUsers = List.of("George Franklin", "Eduardo Rodriquez", "Jean Coleman", "Maria Escobito", "Carlos Estaban");
 	@Override
 	public Optional<Boolean> post(QualificationLifecycleEvent event) {
 		final Boolean qualified =

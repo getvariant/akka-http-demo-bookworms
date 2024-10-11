@@ -75,7 +75,7 @@ public class Variant {
         conn -> {
           Session ssn = conn.getOrCreateSession(
             request,
-            Optional.of("George Franklin"));
+            Optional.of(VariantController.loggedInUser.getFullName()));
           return inferState(request, ssn).map(state -> ssn.targetForState(state));
         });
     } catch (ServerConnectException scx) {
