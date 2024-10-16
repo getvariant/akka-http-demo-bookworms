@@ -57,20 +57,20 @@ public class Variant {
 	/** Infer the Variant state from the referring page's URL. */
 	private static Optional<State> inferState(HttpServletRequest request, Session ssn) {
 
-		String referrerPath = Optional.ofNullable(request.getHeader("referer")).map(refererString -> {
-			try {
-				return new URL(refererString).getPath();
-			}
-			catch (MalformedURLException ex) {
-				throw new RuntimeException(ex);
-			}
-		}).orElseThrow(() -> new RuntimeException("No Referer Header"));
-
-		return ssn.getSchema()
-			.getStates()
-			.stream()
-			.filter(state -> referrerPath.matches(state.getParameters().get("path")))
-			.findAny();
+		return Optional.ofNullable(request.getHeader("referer"))
+			.flatMap(refererString -> {
+				try {
+					String path = new URL(refererString).getPath();
+					return ssn.getSchema()
+						.getStates()
+						.stream()
+						.filter(state -> path.matches(state.getParameters().get("path")))
+						.findAny();
+				}
+				catch (MalformedURLException ex) {
+					throw new RuntimeException(ex);
+				}
+			});
 	}
 
 	public static Optional<StateRequest> targetForState(HttpServletRequest request) {

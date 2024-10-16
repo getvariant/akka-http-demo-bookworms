@@ -11,7 +11,7 @@
          th:if="${users}">
         <span style="font-weight: 700; font-size: 18px;">Select user</span>
         <select
-            onChange="fetch('/login/' + this.value, {method: 'POST'}); location.reload;">
+            onChange="fetch('/login/' + this.value, {method: 'POST'}); console.log('reloading'); location.reload();">
             <option th:each="user : ${users}"
                     th:text="|${user.owner.firstName} ${user.owner.lastName} (${user.dogOrCatCount})|"
                     th:value="${user.owner.id}"
