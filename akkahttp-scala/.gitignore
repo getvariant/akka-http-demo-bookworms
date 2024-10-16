@@ -3,7 +3,7 @@
 *.log
 *.idea/
 *.bsp/
-*/target/
+/target/
 /api/project/
 /node/node_modules/
 /node/target/

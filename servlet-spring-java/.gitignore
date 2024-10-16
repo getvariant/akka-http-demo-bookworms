@@ -4,7 +4,7 @@
 *.idea/
 *.bsp/
 */target/
-/akkahttp-scala/api/project/
+/akkahttp-scale/api/project/
 /akkahttp-scala/node/node_modules/
 /node/target/
 /node/package-lock.json
