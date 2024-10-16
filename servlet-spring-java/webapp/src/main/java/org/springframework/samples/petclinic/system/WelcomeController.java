@@ -31,6 +31,7 @@ class WelcomeController extends BaseController {
 	public WelcomeController(OwnerRepository owners) {
 		super(owners);
 	}
+
 	@GetMapping("/")
 	public String welcome(Model model) {
 		after(before(model));

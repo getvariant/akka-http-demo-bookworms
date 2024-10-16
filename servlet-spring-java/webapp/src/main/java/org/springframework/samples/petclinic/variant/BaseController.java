@@ -14,6 +14,7 @@ import java.util.Optional;
 public abstract class BaseController {
 
 	protected final OwnerRepository owners;
+
 	protected static Owner loggedInUser;
 
 	protected BaseController(OwnerRepository owners) {
@@ -28,22 +29,19 @@ public abstract class BaseController {
 	protected Optional<StateRequest> before(Model model) {
 
 		// Target for this state, if it's instrumented.
-		HttpServletRequest request =
-			((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+			.getRequest();
 
 		Optional<StateRequest> reqOpt = Variant.targetForState(request);
-		reqOpt.ifPresent(
-			req -> {
-				// We have a state request => some experiments may be instrumented.
-				if (Variant.isExperienceLive(req, "FreeVaccinationExp", "WithPromo")) {
-					model.addAttribute("isRenderPromo", true);
-				}
-			});
+		reqOpt.ifPresent(req -> {
+			// We have a state request => some experiments may be instrumented.
+			if (Variant.isExperienceLive(req, "FreeVaccinationExp", "WithPromo")) {
+				model.addAttribute("isRenderPromo", true);
+			}
+		});
 
 		// Populate the login user dropdown
-		var users = owners.findAll().stream()
-			.map(OwnerWrapper::new)
-			.toList();
+		var users = owners.findAll().stream().map(OwnerWrapper::new).toList();
 		model.addAttribute("currentUser", loggedInUser);
 		model.addAttribute("users", users);
 
@@ -51,8 +49,9 @@ public abstract class BaseController {
 	}
 
 	protected void after(Optional<StateRequest> stateRequestOpt) {
-		HttpServletResponse response =
-			((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
+		HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+			.getResponse();
 		stateRequestOpt.ifPresent(req -> req.commit(response));
 	}
+
 }

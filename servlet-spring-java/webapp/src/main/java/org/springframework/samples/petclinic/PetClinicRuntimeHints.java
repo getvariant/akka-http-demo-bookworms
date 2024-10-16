@@ -34,4 +34,5 @@ public class PetClinicRuntimeHints implements RuntimeHintsRegistrar {
 		hints.serialization().registerType(Person.class);
 		hints.serialization().registerType(Vet.class);
 	}
+
 }

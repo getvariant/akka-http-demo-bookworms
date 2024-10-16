@@ -42,10 +42,11 @@ class VariantController extends BaseController {
 	@PostMapping("/login/{ownerId}")
 	public @ResponseBody String loginUser(@PathVariable("ownerId") int ownerId, HttpServletResponse response) {
 		loggedInUser = owners.findById(ownerId);
-		Cookie ssnIdTracker = new Cookie("variant-ssnid","");
+		Cookie ssnIdTracker = new Cookie("variant-ssnid", "");
 		ssnIdTracker.setPath("/");
 		ssnIdTracker.setMaxAge(0);
 		response.addCookie(ssnIdTracker);
 		return "OK";
 	}
+
 }
