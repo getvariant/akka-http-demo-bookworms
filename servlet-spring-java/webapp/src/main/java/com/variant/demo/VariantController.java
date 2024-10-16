@@ -40,7 +40,11 @@ class VariantController extends BaseController {
 	 */
 	@PostMapping("/login/{ownerId}")
 	public @ResponseBody String loginUser(@PathVariable("ownerId") int ownerId, HttpServletResponse response) {
+
+		// "login the user"
 		loggedInUser = owners.findById(ownerId);
+
+		// Destroy the session tracking cookie to simulate a new session.
 		Cookie ssnIdTracker = new Cookie("variant-ssnid", "");
 		ssnIdTracker.setPath("/");
 		ssnIdTracker.setMaxAge(0);

@@ -35,6 +35,7 @@ public abstract class BaseController {
 		Optional<StateRequest> reqOpt = Variant.targetForState(request);
 		reqOpt.ifPresent(req -> {
 			// We have a state request => some experiments may be instrumented.
+			System.out.println("******************* " + Variant.isExperienceLive(req, "FreeVaccinationExp", "WithPromo"));
 			if (Variant.isExperienceLive(req, "FreeVaccinationExp", "WithPromo")) {
 				model.addAttribute("isRenderPromo", true);
 			}
