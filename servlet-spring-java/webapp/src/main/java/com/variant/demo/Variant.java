@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.variant;
+package com.variant.demo;
 
 import com.variant.client.*;
 import com.variant.share.schema.State;

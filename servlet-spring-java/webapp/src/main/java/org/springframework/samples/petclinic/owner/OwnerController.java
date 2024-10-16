@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.variant.client.StateRequest;
-import org.springframework.samples.petclinic.variant.BaseController;
+import com.variant.demo.BaseController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
