@@ -28,8 +28,8 @@ public abstract class BaseController {
 	protected Optional<StateRequest> before(Model model) {
 
 		// Target for this state, if it's instrumented.
-		HttpServletRequest httpServletRequest =
-			((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		HttpServletRequest httpServletRequest = ((ServletRequestAttributes) RequestContextHolder
+			.currentRequestAttributes()).getRequest();
 
 		Optional<StateRequest> reqOpt = Variant.targetForState(httpServletRequest);
 		reqOpt.ifPresent(req -> {

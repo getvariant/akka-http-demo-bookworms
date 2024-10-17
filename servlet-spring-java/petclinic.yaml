@@ -37,14 +37,19 @@ experiments:
       # Only qualify those owners who have dogs or cats.
       - class: com.variant.demo.petclinic.spi.FreeVaccineQualificationHook
 
-  # Feature Flag gating access to the reputation feature on the book details
-  # and the checkout pages. The qualification hook will only allow user
-  # "WithReputation" into the feature.
-#  - name: ReputationFF
-#    experiences:
-#      - name: WithReputation
-#    onStates:
-#      - state: BookDetails
-#      - state: Checkout
-#    hooks:
-#      - class: com.variant.demo.bookworms.spi.ReputationFFQualificationHook
+
+
+
+
+
+
+
+
+
+
+
+
+#        parameters:
+#          weight: '1'
+#
+#      - class: com.variant.spi.stdlib.hook.WeightedRandomTargetingHook

@@ -31,7 +31,7 @@ class VariantController extends BaseController {
 		super(owners);
 	}
 
-	/** Login a user.*/
+	/** Login a user. */
 	@PostMapping("/login")
 	public String loginUser(@ModelAttribute SessionUserDto userDto, HttpServletResponse response) {
 
