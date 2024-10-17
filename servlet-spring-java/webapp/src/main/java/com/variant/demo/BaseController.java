@@ -45,6 +45,7 @@ public abstract class BaseController {
 		var users = owners.findAll().stream().map(OwnerWrapper::new).toList();
 		model.addAttribute("currentUser", loggedInUser);
 		model.addAttribute("users", users);
+		model.addAttribute("user", new SessionUserDto());
 
 		return reqOpt;
 	}

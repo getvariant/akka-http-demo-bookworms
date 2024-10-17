@@ -15,13 +15,12 @@
  */
 package com.variant.demo;
 
+import ch.qos.logback.core.model.Model;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.samples.petclinic.owner.OwnerRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Juergen Hoeller
@@ -35,21 +34,19 @@ class VariantController extends BaseController {
 		super(owners);
 	}
 
-	/**
-	 * Login a user.
-	 */
-	@PostMapping("/login/{ownerId}")
-	public @ResponseBody String loginUser(@PathVariable("ownerId") int ownerId, HttpServletResponse response) {
+	/** Login a user.*/
+	@PostMapping("/login")
+	public String loginUser(@ModelAttribute SessionUserDto userDto, HttpServletResponse response) {
 
 		// "login the user"
-		loggedInUser = owners.findById(ownerId);
+		loggedInUser = owners.findById(userDto.getId());
 
 		// Destroy the session tracking cookie to simulate a new session.
 		Cookie ssnIdTracker = new Cookie("variant-ssnid", "");
 		ssnIdTracker.setPath("/");
 		ssnIdTracker.setMaxAge(0);
 		response.addCookie(ssnIdTracker);
-		return "OK";
+		return "redirect:/";
 	}
 
 }
