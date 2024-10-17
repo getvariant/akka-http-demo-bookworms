@@ -77,7 +77,10 @@ public class Variant {
 		try {
 			return connection().flatMap(conn -> {
 				Session ssn = conn.getOrCreateSession(request,
-						Optional.of(VariantController.loggedInUser.getFullName()));
+						Optional.of(VariantController.loggedInOwner.owner.getFullName()));
+				ssn.setAttribute(
+					"isVaccinationScheduled",
+					VariantController.loggedInOwner.isVaccinationScheduled().toString());
 				return inferState(request, ssn).map(state -> ssn.targetForState(state));
 			});
 		}

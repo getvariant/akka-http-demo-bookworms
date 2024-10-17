@@ -15,7 +15,6 @@
  */
 package com.variant.demo;
 
-import ch.qos.logback.core.model.Model;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.samples.petclinic.owner.OwnerRepository;
@@ -23,9 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * @author Juergen Hoeller
- * @author Ken Krebs
- * @author Arjen Poutsma
+ * Handlers added by Variant
  */
 @Controller
 class VariantController extends BaseController {
@@ -39,13 +36,19 @@ class VariantController extends BaseController {
 	public String loginUser(@ModelAttribute SessionUserDto userDto, HttpServletResponse response) {
 
 		// "login the user"
-		loggedInUser = owners.findById(userDto.getId());
+		loggedInOwner = new OwnerWrapper(owners.findById(userDto.getId()));
 
 		// Destroy the session tracking cookie to simulate a new session.
 		Cookie ssnIdTracker = new Cookie("variant-ssnid", "");
 		ssnIdTracker.setPath("/");
 		ssnIdTracker.setMaxAge(0);
 		response.addCookie(ssnIdTracker);
+		return "redirect:/";
+	}
+
+	@GetMapping("/promo")
+	public String scheduleVaccination() {
+		loggedInOwner.scheduleVaccination();
 		return "redirect:/";
 	}
 

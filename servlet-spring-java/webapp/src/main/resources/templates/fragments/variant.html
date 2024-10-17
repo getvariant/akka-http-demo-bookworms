@@ -1,7 +1,9 @@
 <html>
 <body>
 
-    <div th:fragment="promo-msg" style="text-align: center; margin: -10px 0 10px; background-color: mistyrose;"
+    <div onclick="location.href='/promo';"
+         style="text-align: center; margin: -10px 0 10px; background-color: mistyrose; cursor: pointer;"
+         th:fragment="promo-msg"
          th:if="${isRenderPromo}"
          th:text="#{variant.promo}">
         Promo Message
@@ -9,20 +11,18 @@
 
     <div th:fragment="user-select" style="text-align: right;"
          th:if="${users}">
-        <form id="login-form" th:object="${user}" th:action="@{/login}" method="post">
+        <form id="login-form" th:object="${userDto}" th:action="@{/login}" method="post">
             <span style="font-weight: 700; font-size: 18px;">login user</span>
             <select th:field="*{id}"
                     onChange="document.getElementById('login-form').submit();">
                 <option th:each="user : ${users}"
                         th:text="|${user.owner.firstName} ${user.owner.lastName} (${user.dogOrCatCount})|"
                         th:value="${user.owner.id}"
-                        th:selected="${currentUser != null && user.owner.id == currentUser.id}">
+                        th:selected="${currentUser != null && user.owner.id == currentUser.owner.id}">
             </select>
         </form>
     </div>
 
 </body>
-<script>
 
-</script>
 </html>
