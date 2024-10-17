@@ -41,6 +41,7 @@ public abstract class BaseController {
 
 		// Populate the login user dropdown
 		var users = owners.findAll().stream().map(OwnerWrapper::new).toList();
+		var foo = loggedInOwner;
 		model.addAttribute("currentUser", loggedInOwner);
 		model.addAttribute("users", users);
 		model.addAttribute("userDto", new SessionUserDto());

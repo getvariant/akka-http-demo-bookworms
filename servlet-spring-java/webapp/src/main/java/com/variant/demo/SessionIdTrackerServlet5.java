@@ -13,8 +13,10 @@ public class SessionIdTrackerServlet5 implements SessionIdTracker {
 	private Optional<String> sid = Optional.empty();
 
 	public SessionIdTrackerServlet5(Object data) {
-		HttpServletRequest req = (HttpServletRequest) data;
-		sid = Arrays.stream(req.getCookies())
+		final HttpServletRequest req = (HttpServletRequest) data;
+		// Servlet API returns null instead of an empty array if no cookies
+		final Cookie[] cookies = Optional.ofNullable(req.getCookies()).orElse(new Cookie[0]);
+		sid = Arrays.stream(cookies)
 			.filter(cookie -> getCookieName().equals(cookie.getName()))
 			.findAny()
 			.map(Cookie::getValue);

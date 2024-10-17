@@ -23,12 +23,20 @@ public class FreeVaccineQualificationHook implements QualificationLifecycleHook 
 		final Boolean isVaccinationScheduled =
 			Boolean.parseBoolean(variantSession.getAttributes().get("isVaccinationScheduled"));
 
+		final Optional<String> ownerOpt = event.getSession().getOwnerId();
+
 		final Boolean qualified =
 			!isVaccinationScheduled &&
-			event.getSession().getOwnerId()
-				.map(user -> qualifiedUsers.contains(user))
-				.orElse(false);
+			ownerOpt.map(user -> qualifiedUsers.contains(user)).orElse(false);
 
+		// Signal disqualification as a custom trace event.
+		if (!qualified) {
+			variantSession.triggerEvent(
+				TraceEvent.of(
+					"Disqualified user %s from free vaccination experiment"
+						.formatted(ownerOpt.orElse("Unknown")))
+			);
+		}
 		return Optional.of(qualified);
 	}
 }
