@@ -11,6 +11,11 @@ import java.util.Optional;
 /**
  * Variant CVM.
  * Bookworms demo application.
+ * Qualify user session for the Free Vaccination experiment.
+ * In order to qualify, both must be true:
+ * 1. User is on the list of those who has a dog or a cat. In practice, this would likely
+ *    be a call to the database.
+ * 2. User has not already scheduled the vaccination.
  */
 
 public class FreeVaccineQualificationHook implements QualificationLifecycleHook {
@@ -30,13 +35,11 @@ public class FreeVaccineQualificationHook implements QualificationLifecycleHook 
 			ownerOpt.map(user -> qualifiedUsers.contains(user)).orElse(false);
 
 		// Signal disqualification as a custom trace event.
-		if (!qualified) {
-			variantSession.triggerEvent(
-				TraceEvent.of(
-					"Disqualified user %s from free vaccination experiment"
-						.formatted(ownerOpt.orElse("Unknown")))
-			);
-		}
+		final TraceEvent traceEvent = TraceEvent.of(FreeVaccineQualificationHook.class.getSimpleName());
+		final String comment = "%s user %s from free vaccination experiment"
+			.formatted(qualified ? "Qualified" : "Disqualified", ownerOpt.orElse("Unknown"));
+		traceEvent.getAttributes().put("Comment", comment);
+		event.getSession().triggerEvent(traceEvent);
 		return Optional.of(qualified);
 	}
 }

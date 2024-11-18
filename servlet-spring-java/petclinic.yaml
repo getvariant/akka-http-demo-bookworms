@@ -1,7 +1,6 @@
-#
 # Variation schema for the Petclinic demo application.
 # Copyright Variant 2024.
-#
+
 name: petclinic
 description: Variant experiment schema for the Petclinic demo application
 flusher:

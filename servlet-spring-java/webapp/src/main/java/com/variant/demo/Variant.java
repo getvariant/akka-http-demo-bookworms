@@ -1,10 +1,13 @@
 package com.variant.demo;
 
 import com.variant.client.*;
+import com.variant.client.stdlib.SessionIdTrackerServlet5;
 import com.variant.share.schema.State;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -71,15 +74,22 @@ public class Variant {
 			}
 		});
 	}
+	
+	/** Target for this state, if it's instrumented.
+	 *  We infer the current state by comparing the referrer URL
+	 *  with the state `path` parameter. */
+	public static Optional<StateRequest> targetForState() {
 
-	public static Optional<StateRequest> targetForState(HttpServletRequest request) {
+		HttpServletRequest httpServletRequest = ((ServletRequestAttributes) RequestContextHolder
+			.currentRequestAttributes()).getRequest();
+
 		try {
 			return connection().flatMap(conn -> {
-				Session ssn = conn.getOrCreateSession(request,
+				Session ssn = conn.getOrCreateSession(httpServletRequest,
 						Optional.of(VariantController.loggedInOwner.owner.getFullName()));
 				ssn.setAttribute("isVaccinationScheduled",
 						VariantController.loggedInOwner.isVaccinationScheduled().toString());
-				return inferState(request, ssn).map(state -> ssn.targetForState(state));
+				return inferState(httpServletRequest, ssn).map(state -> ssn.targetForState(state));
 			});
 		}
 		catch (ServerConnectException scx) {
