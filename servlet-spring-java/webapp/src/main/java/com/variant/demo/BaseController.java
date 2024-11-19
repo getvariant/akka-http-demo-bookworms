@@ -27,10 +27,13 @@ public abstract class BaseController {
 	 */
 	protected Optional<StateRequest> before(Model model) {
 
-		// Ask Variant for live experiences.
-		Optional<StateRequest> reqOpt = Variant.targetForState();
+		final Optional<StateRequest> requestOpt = Variant.getVariantSession().flatMap(ssn -> {
+			ssn.setAttribute("isVaccinationScheduled",
+					VariantController.loggedInOwner.isVaccinationScheduled().toString());
+			return Variant.inferState(ssn).map(ssn::targetForState);
+		});
 
-		reqOpt.ifPresent(req -> {
+		requestOpt.ifPresent(req -> {
 			// We have a state request => some experiments may be instrumented.
 			if (Variant.isExperienceLive(req, "FreeVaccinationExp", "WithPromo")) {
 				model.addAttribute("isRenderPromo", true);
@@ -43,7 +46,7 @@ public abstract class BaseController {
 		model.addAttribute("users", users);
 		model.addAttribute("userDto", new SessionUserDto());
 
-		return reqOpt;
+		return requestOpt;
 	}
 
 	protected void after(Optional<StateRequest> stateRequestOpt) {

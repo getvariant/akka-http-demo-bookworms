@@ -58,9 +58,12 @@ public class Variant {
 	}
 
 	/** Infer the Variant state from the referring page's URL. */
-	private static Optional<State> inferState(HttpServletRequest request, Session ssn) {
+	public static Optional<State> inferState(Session ssn) {
 
-		return Optional.ofNullable(request.getHeader("referer")).flatMap(refererString -> {
+		HttpServletRequest httpServletRequest = ((ServletRequestAttributes) RequestContextHolder
+			.currentRequestAttributes()).getRequest();
+
+		return Optional.ofNullable(httpServletRequest.getHeader("referer")).flatMap(refererString -> {
 			try {
 				String path = new URL(refererString).getPath();
 				return ssn.getSchema()
@@ -74,23 +77,14 @@ public class Variant {
 			}
 		});
 	}
-	
-	/** Target for this state, if it's instrumented.
-	 *  We infer the current state by comparing the referrer URL
-	 *  with the state `path` parameter. */
-	public static Optional<StateRequest> targetForState() {
 
-		HttpServletRequest httpServletRequest = ((ServletRequestAttributes) RequestContextHolder
-			.currentRequestAttributes()).getRequest();
-
+	/** Get Variant session. */
+	public static Optional<Session> getVariantSession() {
 		try {
-			return connection().flatMap(conn -> {
-				Session ssn = conn.getOrCreateSession(httpServletRequest,
-						Optional.of(VariantController.loggedInOwner.owner.getFullName()));
-				ssn.setAttribute("isVaccinationScheduled",
-						VariantController.loggedInOwner.isVaccinationScheduled().toString());
-				return inferState(httpServletRequest, ssn).map(state -> ssn.targetForState(state));
-			});
+			HttpServletRequest httpServletRequest = ((ServletRequestAttributes) RequestContextHolder
+				.currentRequestAttributes()).getRequest();
+			return connection().map(conn -> conn.getOrCreateSession(httpServletRequest,
+					Optional.of(VariantController.loggedInOwner.owner.getFullName())));
 		}
 		catch (ServerConnectException scx) {
 			// The server is down. We'll attempt to reconnect.
