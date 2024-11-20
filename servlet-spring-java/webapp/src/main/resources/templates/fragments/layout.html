@@ -60,6 +60,13 @@
             <span>Veterinarians</span>
           </li>
 
+          <span th:style="${!profile ? 'display:none' : ''}">
+          <li
+            th:replace="~{::menuItem ('/oups','my profile','trigger a RuntimeException to see how it is handled','user','My Profile')}">
+            <span class="fa fa-user" aria-hidden="true"></span>
+            <span>My Profile</span>
+          </li>
+         </span>
           <li
             th:replace="~{::menuItem ('/oups','error','trigger a RuntimeException to see how it is handled','exclamation-triangle','Error')}">
             <span class="fa exclamation-triangle" aria-hidden="true"></span>

@@ -38,6 +38,9 @@ public abstract class BaseController {
 			if (Variant.isExperienceLive(req, "FreeVaccinationExp", "WithPromo")) {
 				model.addAttribute("isRenderPromo", true);
 			}
+			model.addAttribute(
+				"profile",
+				Variant.isExperienceLive(req, "ProfileGate", "WithProfile"));
 		});
 
 		// Populate the login user dropdown

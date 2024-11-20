@@ -36,19 +36,16 @@ experiments:
       # Only qualify those owners who have dogs or cats.
       - class: com.variant.demo.petclinic.spi.FreeVaccineQualificationHook
 
+  # Feature Flag gating access to the new Profile menu tab.
+  - name: ProfileGate
+    experiences:
+      - name: WithProfile
+    onStates:
+      - state: Home
+      - state: Vets
+      - state: Owners
+    hooks:
+      - class: com.variant.demo.petclinic.spi.ProfileGateQualificationHook
+        init: ['George Franklin', 'Maria Escobito']
 
 
-
-
-
-
-
-
-
-
-
-
-#        parameters:
-#          weight: '1'
-#
-#      - class: com.variant.spi.stdlib.hook.WeightedRandomTargetingHook

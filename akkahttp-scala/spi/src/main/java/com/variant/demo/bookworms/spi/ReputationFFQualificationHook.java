@@ -12,6 +12,7 @@ import java.util.Optional;
  */
 
 public class ReputationFFQualificationHook implements QualificationLifecycleHook {
+
 	@Override
 	public Optional<Boolean> post(QualificationLifecycleEvent event) {
 		var qualified = "WithReputation".equals(event.getSession().getOwnerId().get());

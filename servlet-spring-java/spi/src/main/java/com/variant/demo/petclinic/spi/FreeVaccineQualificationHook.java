@@ -36,7 +36,7 @@ public class FreeVaccineQualificationHook implements QualificationLifecycleHook 
 
 		// Signal disqualification as a custom trace event.
 		final TraceEvent traceEvent = TraceEvent.of(FreeVaccineQualificationHook.class.getSimpleName());
-		final String comment = "%s user %s from free vaccination experiment"
+		final String comment = "%s user %s"
 			.formatted(qualified ? "Qualified" : "Disqualified", ownerOpt.orElse("Unknown"));
 		traceEvent.getAttributes().put("Comment", comment);
 		event.getSession().triggerEvent(traceEvent);
