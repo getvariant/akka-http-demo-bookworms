@@ -1,0 +1,28 @@
+<html>
+<body>
+
+    <div onclick="location.href='/promo';"
+         style="text-align: center; margin: -10px 0 10px; background-color: mistyrose; cursor: pointer;"
+         th:fragment="promo-msg"
+         th:if="${isRenderPromo}"
+         th:text="#{variant.promo}">
+        Promo Message
+    </div>
+
+    <div th:fragment="user-select" style="text-align: right;"
+         th:if="${users}">
+        <form id="login-form" th:object="${userDto}" th:action="@{/login}" method="post">
+            <span style="font-weight: 700; font-size: 18px;">login user</span>
+            <select id="id" name="id"
+                    onChange="document.getElementById('login-form').submit();">
+                <option th:each="user : ${users}"
+                        th:text="|${user.owner.firstName} ${user.owner.lastName} (${user.dogOrCatCount})|"
+                        th:value="${user.owner.id}"
+                        th:selected="${currentUser != null && user.owner.id == currentUser.owner.id}">
+            </select>
+        </form>
+    </div>
+
+</body>
+
+</html>

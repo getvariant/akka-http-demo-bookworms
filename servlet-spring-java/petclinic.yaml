@@ -1,0 +1,51 @@
+# Variation schema for the Petclinic demo application.
+# Copyright Variant 2024.
+
+name: petclinic
+description: Variant experiment schema for the Petclinic demo application
+flusher:
+  class: com.variant.spi.stdlib.flush.TraceEventFlusherCsv
+
+states:
+  - name: Home
+    parameters:
+      path: /
+  - name: Vets
+    parameters:
+      path: /vets.html
+  - name: Owners
+    parameters:
+      path: "/owners|/owners/find"
+
+experiments:
+
+  # Testing offers of free core vaccination to owners of cats or dogs.
+  - name: FreeVaccinationExp
+    experiences:
+      - name: NoPromo
+        isControl: true
+      - name: WithPromo
+    onStates:
+      - state: Home
+      - state: Owners
+      - state: Vets
+    timeToLive:
+      qualification: state
+      targeting: session  # In real life should be `experiment`
+    hooks:
+      # Only qualify those owners who have dogs or cats.
+      - class: com.variant.demo.petclinic.spi.FreeVaccineQualificationHook
+
+  # Feature Flag gating access to the new Profile menu tab.
+  - name: ProfileGate
+    experiences:
+      - name: WithProfile
+    onStates:
+      - state: Home
+      - state: Vets
+      - state: Owners
+    hooks:
+      - class: com.variant.demo.petclinic.spi.ProfileGateQualificationHook
+        init: ['George Franklin', 'Maria Escobito']
+
+

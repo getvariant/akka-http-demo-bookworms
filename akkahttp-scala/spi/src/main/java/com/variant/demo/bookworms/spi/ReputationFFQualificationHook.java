@@ -7,11 +7,12 @@ import com.variant.server.spi.QualificationLifecycleHook;
 import java.util.Optional;
 
 /**
- * Variant CVM.
+ * Variant Experiment Server.
  * Bookworms demo application.
  */
 
 public class ReputationFFQualificationHook implements QualificationLifecycleHook {
+
 	@Override
 	public Optional<Boolean> post(QualificationLifecycleEvent event) {
 		var qualified = "WithReputation".equals(event.getSession().getOwnerId().get());

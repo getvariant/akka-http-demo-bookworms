@@ -4,58 +4,42 @@
 Demonstrates instrumentation of an A/B test and a feature flag with 
 [Variant Experiment Server](https://getvariant.com). The demo application is a simple host webapp called Bookworms
 written in NodeJS on the front-end and a back-end API server written in Scala on top of the Akka HTTP
-Web server. The API backend utilizes Variant Java SDK to communicate with Variant server.
+Web server. The API backend utilizes Variant Java SDK to communicate with Variant server. Java 17 or higher is required.
 
 Complete Docs at https://getvariant.com
 
-### 1. Downloading and Configuring
-
-#### Clone this repository 
-```shell
-git clone git@github.com:getvariant/variant-demo-jvm-bookworms.git
-```
-The repository has the following four directories:
+Directories:
 * `api` Bookworms' backend API written in Scala with Akka HTTP. This is the module that uses Variant
 Java SDK to communicate with Variant server. (Scala is a JVM language fully capabale of consuming Java services.)
 * `node` Bookworms' frontend written in NodeJS.
 * `spi` Java sources for the server-side extensions used by this demo.
 
-#### Deploy Variant Experiment Server
-__Important Notice:__ A fully fledged copy of Variant Experiment Server is included with this demo. You are
-allowed to continue using it in development, but not in production. If you wish to try Variant in production,
-you must obtain a production license.
+#### Download and Deploy Variant Experiment Server
+* Follow [Variant Experiment Server Installation and Configuration Guide](https://getvariant.com/documentation/server/variant-experiment-server-installation-and-configuration-guide/)
+  to download and deploy Variant server.
 
-* Download the Variant server distribution zip archive to a directory of your choice outside this
-repository, e.g. `/tmp`, and inzip.
+* Copy the experiment schema file `bookworms.yaml` to the server's `schemata` directory:
 ```shell
-curl -O https://s3.us-west-1.amazonaws.com/com.variant.pub/1.4.0/variant-server-1.4.0.zip
-unzip variant-server-1.4.0.zip
+cp bookworms.yaml <server-directory>/schemata
 ```
-This will create the complete server directory structure in `/tmp/variant-server-1.4.0`
-
-* Copy the Variant schema file `bookworms.yaml` to the server's `schemata` directory:
-```shell
-cp bookworms.yaml /tmp/variant-server-1.4.0/schemata
-```
-* Edit the Variant config file `/tmp/variant-server-1.4.0/conf/variant.conf`. Uncomment
+* Edit the Variant config file `<server-directory>/conf/variant.conf`. Uncomment
 and change the value of the parameter `event.writer.max.delay` which forces the flushing of the event
 buffers to disk:
 ```text
  event.writer.max.delay = 1
 ```
-This will ensure that you'll be able to see variant trace events written out to disk with a delay of
-at most one second.
+This enables you to see Variant trace events written out to disk as soon as they are generated.
 
 * Build the server-side extensions and copy them to where the running server will be able to find them:
 ```shell
 cd spi
 mvn clean package
-cp target/bookworms-spi-1.4.0.jar /tmp/variant-server-1.4.0/spi
+cp target/bookworms-spi-1.4.0.jar <server-directory>/spi
 ```
 
 * Start Variant server:
 ```shell
-/tmp/variant-server-1.4.0/bin/variant start
+<server-directory>/bin/variant start
 ```
 This will start Variant server in the foreground and you should see the following output:
 ```text
@@ -67,7 +51,7 @@ This will start Variant server in the foreground and you should see the followin
 ```
 
 Note that the Bookworms experiment schema uses the trace event flusher that writes trace events into the local
-comma-separated values (CSV) file `/tmp/variant-server-1.4.0/log/trace-events.csv`
+comma-separated values (CSV) file `<server-directory>/log/trace-events.csv`
 
 #### Create the Postgres Database
 Assuming you have Docker installed (e.g. Docker Desktop for MacOS),
