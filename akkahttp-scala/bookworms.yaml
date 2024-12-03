@@ -44,8 +44,7 @@ experiments:
       - class: com.variant.demo.bookworms.spi.FreeShippingExpQualificationHook
 
   # Feature Flag gating access to the reputation feature on the book details
-  # and the checkout pages. The qualification hook will only allow user
-  # "WithReputation" into the feature.
+  # and the checkout pages.
   - name: ReputationFF
     experiences:
       - name: WithReputation
@@ -53,4 +52,5 @@ experiments:
       - state: BookDetails
       - state: Checkout
     hooks:
+      # Only allow the user "WithReputation" into the feature.
       - class: com.variant.demo.bookworms.spi.ReputationFFQualificationHook

@@ -7,7 +7,7 @@ import com.variant.server.spi.QualificationLifecycleHook;
 import java.util.Optional;
 
 /**
- * Variant CVM.
+ * Variant Experiment Server.
  * Bookworms demo application.
  */
 
