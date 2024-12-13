@@ -31,7 +31,7 @@
     <maven-checkstyle.version>3.3.1</maven-checkstyle.version>
     <nohttp-checkstyle.version>0.0.11</nohttp-checkstyle.version>
     <spring-format.version>0.0.41</spring-format.version>
-    <variant.version>1.4.0</variant.version>
+    <variant.version>1.5.0</variant.version>
 
   </properties>
 
@@ -49,7 +49,7 @@
       <artifactId>variant-java-client</artifactId>
       <version>${variant.version}</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/lib/variant-java-client-1.4.0.jar</systemPath>
+      <systemPath>${project.basedir}/lib/variant-java-client-${variant.version}.jar</systemPath>
     </dependency>
 
     <!-- Spring and Spring Boot dependencies -->

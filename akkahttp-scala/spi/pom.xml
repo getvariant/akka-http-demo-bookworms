@@ -10,7 +10,7 @@
     
 	<properties>
     	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <variant.version>1.4.0</variant.version>
+        <variant.version>1.5.0</variant.version>
     </properties>
 
     <name>Server-side extensions for the Bookworms demo applications</name>
